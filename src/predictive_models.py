@@ -613,7 +613,6 @@ def extract_naive_realism_features(text):
     dismissive_terms = ["idiot", "fool", "biased", "brainwashed", "fake", "delusional"]
     dismissive_count = sum(w in text.lower() for w in dismissive_terms)
 
-    blob = TextBlob(text)
     return (
         absolute_ratio,
         cautious_ratio,
