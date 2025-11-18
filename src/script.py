@@ -1,5 +1,5 @@
 import json
-from predictive_models import (
+from src.predictive_models import (
     load_datasets, 
     build_frequency_model, 
     build_echo_chamber_model,
@@ -7,7 +7,7 @@ from predictive_models import (
     build_credibility_model,
 )
 
-from articles import (
+from src.articles import (
     train_party_and_job_models,
     evaluate_article
 )

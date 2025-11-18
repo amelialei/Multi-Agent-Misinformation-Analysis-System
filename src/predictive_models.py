@@ -619,8 +619,9 @@ def extract_naive_realism_features(text):
         dismissive_count
     )
 
-def build_naive_realism_model(df_train):
-    df_train["naive_realism"] = df_train["statement"].apply(map_naive_realism_from_sentiment)
+def build_naive_realism_model(df_train, df_val, df_test):
+    for df in [df_train, df_val, df_test]:
+        df["naive_realism"] = df["statement"].apply(map_naive_realism_from_sentiment)
 
     feats = df_train["statement"].apply(extract_naive_realism_features)
     df_train[["absolute_ratio", "cautious_ratio", "dismissive_count"]] = pd.DataFrame(

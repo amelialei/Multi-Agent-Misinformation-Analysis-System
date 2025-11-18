@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
-from predictive_models import (
+from src.predictive_models import (
     predict_frequency_model,
     predict_echo_chamber_model,
     predict_sensationalism_model,
