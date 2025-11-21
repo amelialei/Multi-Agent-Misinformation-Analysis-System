@@ -22,8 +22,7 @@ Each model captures a unique dimension of factuality, contributing to a broader 
 - eda_visualization.ipynb - Exploratory Data Analysis of the training dataset; includes distribution plots, text patterns, and insight visualizations.  
 - ModelAccuracy.ipynb - Visualizations and metrics to compare each model's performance (accuracy, precision, recall, F1-score, etc.).  
 
-- data/ - Local folder containing the LIAR-PLUS dataset (`train2.tsv`, `val2.tsv`, `test2.tsv`).  
-*Note: this folder is excluded from GitHub via `.gitignore` for size and licensing reasons.*  
+- data/ - Local folder containing the LIAR-PLUS dataset (`train2.tsv`, `val2.tsv`, `test2.tsv`).
 
 - requirements.txt - Lists all Python dependencies needed to reproduce the environment.  
 
