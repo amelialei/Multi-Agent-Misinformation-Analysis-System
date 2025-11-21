@@ -12,21 +12,45 @@ We use the LIAR-PLUS dataset to train separate models for:
 Each model captures a unique dimension of factuality, contributing to a broader framework for automated fact-checking.
 
 ## Repository Structure
-- src/ - Contains all source code for model building, configuration, and execution.
-- article.py - Contains main ingestion for articles.
-- predictive_models.py - Core logic for each factuality model, including training and prediction functions.  
-- script.py - The main entry point that loads the dataset, builds models, runs predictions, and outputs results.  
-- config.json - Central configuration file specifying dataset paths and hyperparameters for each model.  
-
-- notebooks/ - Jupyter notebooks for exploratory data analysis and model evaluation.  
-- eda_visualization.ipynb - Exploratory Data Analysis of the training dataset; includes distribution plots, text patterns, and insight visualizations.  
-- ModelAccuracy.ipynb - Visualizations and metrics to compare each model's performance (accuracy, precision, recall, F1-score, etc.).  
-
-- data/ - Local folder containing the LIAR-PLUS dataset (`train2.tsv`, `val2.tsv`, `test2.tsv`).
-
-- requirements.txt - Lists all Python dependencies needed to reproduce the environment.  
-
-- .gitignore - Ensures unnecessary files are not pushed to GitHub.
+```text
+DSC180A-Q1Project/
+├── data/                             # Datasets used for modeling & evaluation
+│   ├── article.txt
+│   ├── ground_truth.csv
+│   ├── politifact.csv
+│   ├── train_set.csv / train2.tsv
+│   ├── val_set.csv   / val2.tsv
+│   └── test_set.csv  / test2.tsv
+│
+├── notebooks/                        # Exploration, prompting, and evaluation notebooks
+│   ├── eda_visualization.ipynb
+│   ├── model_accuracy.ipynb
+│   ├── prompting.ipynb
+│   ├── scraped_data.ipynb
+│   └── hand_labels_template.csv
+│
+├── research/                         # Final capstone research report
+│   └── DSC180A_Capstone_Report.pdf
+│
+├── src/                              # Core project source code
+│   ├── __init__.py
+│   ├── articles.py                   # Article ingestion, preprocessing
+│   ├── predictive_models.py          # ML/LLM-based prediction pipeline
+│   ├── script.py                     # Main script to run full pipeline
+│   └── config.json                   # Config settings for models and pipeline
+│
+├── webapp/                           # Flask-based UI for demo interactions
+│   ├── app.py                        # Flask entrypoint
+│   ├── data_outputs.csv              # Outputs saved from UI interactions
+│   ├── static/
+│   │   └── style.css                 # CSS styling for UI
+│   └── templates/
+│       └── index.html                # Main UI page
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
+```
 
 ## Dataset
 This project uses the LIAR-PLUS dataset, an extended version of the original LIAR dataset.
