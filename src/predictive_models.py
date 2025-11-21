@@ -15,38 +15,14 @@ from textblob import TextBlob
 # Load in full LiarPLUS datasets
 def load_datasets(train_path, val_path, test_path):
     """
-    Load and preprocess the LIAR-PLUS datasets (training, validation, and test sets).
+    Load merged LiarPLUS/Politifact datasets (train, validation, test).
     """
-    # Define column names for the LiarPLUS dataset
-    cols = [
-    "index", "id", "label", "statement", "subject", "speaker", "job", "state",
-    "party", "barely_true", "false", "half_true", "mostly_true", "pants_on_fire",
-    "context", "justification"
-    ]
 
-    dfs = []
+    train_df = pd.read_csv(train_path)
+    val_df = pd.read_csv(val_path)
+    test_df = pd.read_csv(test_path)
 
-    # Process each dataset file
-    for path in [train_path, val_path, test_path]:
-        # Load TSV file without header
-        df = pd.read_csv(path, sep="\t", header=None)
-        df.columns = cols
-        
-        # Remove unnecessary index column
-        df = df.drop(columns=["index"])
-        
-        # Clean ID field by removing .json extension
-        df["id"] = df["id"].str.replace(".json", "", regex=False)
-        
-        # Strip whitespace from all text columns
-        for col in df.select_dtypes(include=["object"]).columns:
-            df[col] = df[col].str.strip()
-            
-        # Reset index for clean indexing
-        df.reset_index(drop=True, inplace=True)
-        dfs.append(df)
-
-    return dfs
+    return train_df, val_df, test_df
 
 # Frequency Heuristic Model
 def build_frequency_model(df_train):
