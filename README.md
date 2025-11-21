@@ -1,4 +1,4 @@
-# DSC180A Capstone Project - Beyond the Buzz
+# DSC180A Capstone Project - NIA
 
 ## Overview
 This project aims to mitigate the gap of truth identification in an era where bias and sensationalism are prevalent in the political landscape through the use of mutliple factuality factors.
