@@ -8,7 +8,7 @@ from src.predictive_models import (
 )
 
 from src.articles import (
-    train_party_and_job_models,
+    train_job_model,
     evaluate_article
 )
 
@@ -39,7 +39,7 @@ def main():
     cred_pipeline, party_enc_cred = build_credibility_model(df_train, df_val, df_test, **cred_cfg)
     print("Credibility model trained.")
 
-    (party_clf, party_le), (job_clf, job_le) = train_party_and_job_models(df_train)
+    job_clf, job_le = train_job_model(df_train)
 
     freq_model = (model_freq, tfidf_freq, count_vec_freq, token_dict_freq, buzzwords_freq, le_freq)
     echo_model = (model_echo, vectorizer_echo, le_echo, concentration_map)
