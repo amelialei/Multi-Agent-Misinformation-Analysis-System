@@ -14,15 +14,15 @@ Each model captures a unique dimension of factuality, contributing to a broader 
 ## Repository Structure
 ```text
 DSC180A-Q1Project/
-├── data/                             # Datasets used for modeling & evaluation
-│   ├── article.txt
-│   ├── ground_truth.csv
-│   ├── politifact.csv
+├── data/
+│   ├── article.txt                   # Article text for ingestion
+│   ├── ground_truth.csv              # Hand-labeled articles with appropriate factuality factor scores
+│   ├── politifact.csv                # Manually scraped data from Politifact.org to augment LIAR-PLUS dataset
 │   ├── train_set.csv / train2.tsv
 │   ├── val_set.csv   / val2.tsv
 │   └── test_set.csv  / test2.tsv
 │
-├── notebooks/                        # Exploration, prompting, and evaluation notebooks
+├── notebooks/
 │   ├── eda_visualization.ipynb
 │   ├── model_accuracy.ipynb
 │   ├── prompting.ipynb
