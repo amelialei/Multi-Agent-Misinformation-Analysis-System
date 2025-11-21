@@ -7,8 +7,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.compose import ColumnTransformer
 from xgboost import XGBClassifier
-from scipy.sparse import hstack
-from sklearn.utils import resample
 from textblob import TextBlob
 
 
@@ -17,7 +15,6 @@ def load_datasets(train_path, val_path, test_path):
     """
     Load merged LiarPLUS/Politifact datasets (train, validation, test).
     """
-
     train_df = pd.read_csv(train_path)
     val_df = pd.read_csv(val_path)
     test_df = pd.read_csv(test_path)
@@ -337,9 +334,8 @@ def map_naive_realism_from_sentiment(text):
         return 1   # somewhat naive-realist
     else:
         return 2   # strongly naive-realist
-    
+  
 def extract_naive_realism_features(text):
-
     text = str(text)
     words = text.lower().split()
 
@@ -351,11 +347,13 @@ def extract_naive_realism_features(text):
     dismissive_terms = ["idiot", "fool", "biased", "brainwashed", "fake", "delusional"]
     dismissive_count = sum(w in text.lower() for w in dismissive_terms)
 
+    blob = TextBlob(text)
     return (
         absolute_ratio,
         cautious_ratio,
         dismissive_count
     )
+
 
 def build_naive_realism_model(df_train, df_val, df_test):
     for df in [df_train, df_val, df_test]:
@@ -367,12 +365,10 @@ def build_naive_realism_model(df_train, df_val, df_test):
     )
 
     text_col = "statement"
-    meta_features = ["speaker", "context", "job"]
     numeric_features = ["absolute_ratio", "cautious_ratio", "dismissive_count"]
 
     preprocessor = ColumnTransformer([
         ("text", TfidfVectorizer(max_features=5000, stop_words="english"), text_col),
-        ("cat", OneHotEncoder(handle_unknown="ignore"), meta_features),
         ("num", StandardScaler(), numeric_features)
     ])
 
@@ -392,13 +388,13 @@ def build_naive_realism_model(df_train, df_val, df_test):
         ("model", model)
     ])
 
-    X_train = df_train[[text_col] + meta_features + numeric_features]
+    X_train = df_train[[text_col] + numeric_features]
     y_train = df_train["naive_realism"]
     pipeline.fit(X_train, y_train)
 
-    return pipeline, meta_features, numeric_features
+    return pipeline, numeric_features
 
-def predict_naive_realism_model(df, pipeline, meta_features, numeric_features):
+def predict_naive_realism_model(df, pipeline, numeric_features):
     df = df.copy()
 
     feats = df["statement"].apply(extract_naive_realism_features)
@@ -406,7 +402,7 @@ def predict_naive_realism_model(df, pipeline, meta_features, numeric_features):
         feats.tolist(), index=df.index
     )
 
-    X = df[["statement"] + meta_features + numeric_features]
+    X = df[["statement"] + numeric_features]
     preds = pipeline.predict(X)
     probs = pipeline.predict_proba(X).max(axis=1)
 
@@ -416,7 +412,6 @@ def predict_naive_realism_model(df, pipeline, meta_features, numeric_features):
         "predicted_naive_realism": preds,
         "naive_realism_score": probs
     })
-
 
 
 

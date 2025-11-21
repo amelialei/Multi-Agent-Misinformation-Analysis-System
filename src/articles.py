@@ -8,9 +8,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 from src.predictive_models import (
     predict_frequency_model,
-    predict_echo_chamber_model,
     predict_sensationalism_model,
-    predict_credibility_model
+    predict_malicious_account_model, 
+    predict_naive_realism_model
 )
 
 # Load spaCy English language model for NLP processing
@@ -120,7 +120,7 @@ def prepare_article_for_models(article, job_clf, job_le):
 
     return df
 
-def evaluate_article(url, freq_model, echo_model,sens_model, cred_model, job_model):
+def evaluate_article(url, freq_model, echo_model, sens_model, cred_model, job_model):
     """
     Evaluate an article using all trained models
     """
