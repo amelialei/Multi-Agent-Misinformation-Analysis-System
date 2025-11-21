@@ -19,9 +19,6 @@ def factuality_score(article_text):
     """
 
     prompt = f"""
-    RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES.
-    OUTPUT ONLY A JSON OBJECT.
-
     You are an expert in misinformation and disinformation detection, scoring, and ranking. Your task is to analyze the given article and 
     score how strongly it exhibits each factuality factor. 
     ---
