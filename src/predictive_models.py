@@ -648,7 +648,6 @@ def predict_naive_realism_model(df, pipeline, meta_features, numeric_features):
     })
 
 
-    
 
 
 
