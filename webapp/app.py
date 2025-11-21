@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 from google import genai
 import json
+import pandas as pd
+import uuid
 
 load_dotenv()
 
@@ -141,6 +143,38 @@ def factuality_score(article_text):
 def index():
     return render_template("index.html")
 
+def save_to_csv(article_text, parsed):
+    run_id = str(uuid.uuid4())
+
+    row = {
+        "id": run_id,
+        "article": article_text,
+
+        "freq_score": parsed["frequency_heuristic"]["score"],
+        "freq_reason": parsed["frequency_heuristic"]["reasoning"],
+        "freq_confidence": parsed["frequency_heuristic"]["confidence"],
+
+        "mal_score": parsed["malicious_account"]["score"],
+        "mal_reason": parsed["malicious_account"]["reasoning"],
+        "mal_confidence": parsed["malicious_account"]["confidence"],
+
+        "sens_score": parsed["sensationalism"]["score"],
+        "sens_reason": parsed["sensationalism"]["reasoning"],
+        "sens_confidence": parsed["sensationalism"]["confidence"],
+
+        "naive_score": parsed["naive_realism"]["score"],
+        "naive_reason": parsed["naive_realism"]["reasoning"],
+        "naive_confidence": parsed["naive_realism"]["confidence"]
+    }
+
+    df_row = pd.DataFrame([row])
+    csv_path = "data_outputs.csv"
+
+    if os.path.exists(csv_path):
+        df_row.to_csv(csv_path, mode="a", header=False, index=False)
+    else:
+        df_row.to_csv(csv_path, index=False)
+
 @app.route("/score", methods=["POST"])
 def score():
     article_text = request.form.get("article", "")
@@ -163,6 +197,8 @@ def score():
             json_str = clean[start:end+1]
 
             parsed = json.loads(json_str)
+
+            save_to_csv(article_text, parsed)
 
         except Exception:
             return jsonify({"error": "Model returned invalid JSON", "raw": raw_output}), 500
