@@ -160,6 +160,8 @@ The Flask UI lets you do the following:
 - Paste article text
 - View scores for each factuality factor
 - View reasoning and confidence percentages
+- Use a Clear button to analyze a new article
+- Automatically saves every analysis to `data_outputs.csv`
 
 ## Model Summaries
 Each model focuses on a different factuality factor within political statements, capturing linguistic, contextual, or behavioral patterns associated with truthfulness and bias.
