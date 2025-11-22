@@ -5,9 +5,9 @@ This project aims to mitigate the gap of truth identification in an era where bi
 We use the LIAR-PLUS dataset to train separate models for:
 
 - Frequency Heuristics - detecting overuse of buzzwords and repetition.  
-- Echo Chambers - measuring topic and party alignment.  
 - Sensationalism - identifying exaggeration and emotional language.  
-- Credibility - assessing the speaker's overall reliability.
+- Malicious Account Patterns – detecting linguistic markers commonly associated with bot-like or spammy messaging.
+- Naive Realism – capturing absolutist, polarized, or dismissive language that reflects cognitive bias
 
 Each model captures a unique dimension of factuality, contributing to a broader framework for automated fact-checking.
 
