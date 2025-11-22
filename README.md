@@ -168,6 +168,11 @@ The Flask UI lets you do the following:
 cd webapp
 ```
 
+### 2. Start the Flask server
+```bash
+python app.py
+```
+
 ## Model Summaries
 Each model focuses on a different factuality factor within political statements, capturing linguistic, contextual, or behavioral patterns associated with truthfulness and bias.
 
