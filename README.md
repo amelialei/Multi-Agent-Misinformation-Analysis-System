@@ -173,6 +173,12 @@ cd webapp
 python app.py
 ```
 
+### 3. Opent the UI in your browser
+```cpp
+http://127.0.0.1:5000
+```
+Your interactive Narrative Integrity Analyzer is now running!
+
 ## Model Summaries
 Each model focuses on a different factuality factor within political statements, capturing linguistic, contextual, or behavioral patterns associated with truthfulness and bias.
 
