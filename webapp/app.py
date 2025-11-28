@@ -6,9 +6,14 @@ from google.genai import types
 import json
 import pandas as pd
 import uuid
+import sys
+
+# Add project root to Python path
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(ROOT)
 
 # Importing models
-from predictive_models import (
+from src.predictive_models import (
     load_datasets,
     build_frequency_model, predict_frequency_model,
     build_sensationalism_model, predict_sensationalism_model,
@@ -25,9 +30,9 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Initializing Models - Runs at Start of Flask
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-TRAIN_PATH = os.path.join(DATA_DIR, "train2.tsv")
-VAL_PATH   = os.path.join(DATA_DIR, "val2.tsv")
-TEST_PATH  = os.path.join(DATA_DIR, "test2.tsv")
+TRAIN_PATH = os.path.join(DATA_DIR, "train_set.csv")
+VAL_PATH   = os.path.join(DATA_DIR, "val_set.csv")
+TEST_PATH  = os.path.join(DATA_DIR, "test_set.csv")
 
 print("Loading LIAR-PLUS datasets...")
 train_df, val_df, test_df = load_datasets(TRAIN_PATH, VAL_PATH, TEST_PATH)
