@@ -110,8 +110,7 @@ def get_model_scores(article_text: str) -> dict:
 # Prompting
 def factuality_score(article_text):
     """
-    Placeholder scoring function — you will later replace with your
-    factuality factor pipeline or multi-agent scoring.
+    Ask Gemini to analyze the article AND optionally call get_model_scores() as a tool.
     """
 
     prompt = f"""
@@ -212,23 +211,72 @@ def factuality_score(article_text):
     Sensationalism: 1 — 'Cured chronic illness' is dramatic claim but is presented as a quote from influencer. 
     Naive Realism: 1 — Amplifies an unverified claim but includes expert skepticism. 
     
-    ### Article to Evaluate: {article_text} 
-    ### Tool Usage Requirement: You also have access to tools that return a predictive model score for each factuality factor. 
+    ### Article to Evaluate: {article_text}
+
+    ### Tool you can call
+    You have access to a function called `get_model_scores(article_text: str)` which returns
+    model-derived scores for each factuality factor, in the following structure:
+
+    {{
+      "frequency_heuristic": {{
+        "model_score": 0|1|2,
+        "model_confidence": float
+      }},
+      "malicious_account": {{
+        "model_score": 0|1|2,
+        "model_confidence": float
+      }},
+      "sensationalism": {{
+        "model_score": 0|1|2,
+        "model_confidence": float
+      }},
+      "naive_realism": {{
+        "model_score": 0|1|2,
+        "model_confidence": float
+      }}
+    }}
+
     Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
     ### Instructions: 
-    1. Think step-by-step about the article’s tone, evidence, framing, and intent. 
-    2. Identify linguistic cues that signal bias, repetition, exaggeration, or malicious intent. 
-    3. Use your factuality factor analysis and the tool outputs to provide a numeric score, a justification for why that score was chosen, and your confidence
-    level in that assessment on a scale of 0-100%. If your score is different than the predictive model score, you must explain why you disagree. 
+    1. First, think step-by-step about the article's tone, evidence, framing, and intent. 
+    2. If helpful, call get_model_scores(article_text) to inspect the ML model predictions.
+    3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+       and your confidence level in that assessment on a scale of 0-100%.
+       If your score is different than the model_score, you must explain why you disagree. 
     4. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
-    ### Output Format: {{ "frequency_heuristic": {{ "score": 0|1|2, "reasoning": "Explanation", "confidence": 0-100 }}, "malicious_account": {{ "score": 0|1|2, "reasoning": "Explanation", "confidence": 0-100 }}, "sensationalism": {{ "score": 0|1|2, "reasoning": "Explanation", "confidence": 0-100 }}, "naive_realism": {{ "score": 0|1|2, "reasoning": "Explanation", "confidence": 0-100 }} }}
+    ### Output Format:
+    {{
+      "frequency_heuristic": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+      }},
+      "malicious_account": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+      }},
+      "sensationalism": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+      }},
+      "naive_realism": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+      }}
+    }}
     """
 
     response = client.models.generate_content(
         model="gemini-2.5-pro",
-        contents=prompt
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            tools=[get_model_scores],
+        ),
     )
 
     return response.text.strip()
