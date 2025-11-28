@@ -7,6 +7,7 @@ import json
 import pandas as pd
 import uuid
 
+# Importing models
 from predictive_models import (
     load_datasets,
     build_frequency_model, predict_frequency_model,
@@ -22,7 +23,31 @@ app = Flask(__name__)
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
+# Initializing Models - Runs at Start of Flask
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+TRAIN_PATH = os.path.join(DATA_DIR, "train2.tsv")
+VAL_PATH   = os.path.join(DATA_DIR, "val2.tsv")
+TEST_PATH  = os.path.join(DATA_DIR, "test2.tsv")
 
+print("Loading LIAR-PLUS datasets...")
+train_df, val_df, test_df = load_datasets(TRAIN_PATH, VAL_PATH, TEST_PATH)
+
+print("Building Frequency model...")
+freq_model, freq_tfidf, freq_count_vec, freq_token_dict, freq_buzzwords, freq_le = \
+    build_frequency_model(train_df)
+
+print("Building Sensationalism model...")
+sens_pipeline, sens_numeric_features = build_sensationalism_model(train_df)
+
+print("Building Malicious Account model...")
+mal_model, mal_tfidf, mal_le = build_malicious_account_model(train_df)
+
+print("Building Naive Realism model...")
+naive_pipeline, naive_numeric_features = build_naive_realism_model(train_df)
+
+print("All models initialized.")
+
+# Prompting
 def factuality_score(article_text):
     """
     Placeholder scoring function — you will later replace with your
