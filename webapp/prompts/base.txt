@@ -3,30 +3,50 @@ score how strongly it exhibits each factuality factor.
 ---
 
 ### Factuality Factors: 
-1. **Frequency Heuristic** 
-- *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references. 
-- *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source. 
-- *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim. 
-- **Scoring:** 0 = none/minimal repetition; 1 = moderate repetition or common-belief phrasing; 2 = heavy repetition or appeal to consensus. 
+1. Frequency Heuristic
+- Look for repetition, repeated claims, or appeals to popularity (“many people are saying…”).
+- Score: 0 = minimal/no repetition; 1 = some repetitive or consensus-based framing; 2 = heavy repetition or appeal to consensus.
 
-2. **Malicious Account** - *Account Analysis*: If the text references or cites accounts, consider whether 
-their creation dates or activity patterns suggest inauthentic behavior. 
-- *Interaction Patterns*: Evaluate if the content originates from or interacts with accounts resembling coordinated or bot-like behavior. 
-- *Content Review*: Assess if the account or source repeatedly spreads false or harmful information. 
-- **Scoring:** 0 = credible source; 1 = slightly suspicious or biased source; 2 = clearly deceptive, coordinated, or malicious source. 
+2. Malicious Account
+- Assess whether the source or referenced accounts appear suspicious, coordinated, inauthentic, or unreliable.
+- Score: 0 = credible source; 1 = mildly suspicious; 2 = deceptive, coordinated, or malicious.
 
-3. **Sensationalism** - *Language Intensity*: Examine the text for overly dramatic or exaggerated claims. 
-- *Tone Comparison*: Compare emotional tone of headlines versus main content. 
-- *Shock vs. Substance*: Determine whether the article prioritizes shock value over factual reporting. 
-- **Scoring:** 0 = neutral/objective; 1 = mildly emotional or dramatic; 2 = highly sensationalized 
+3. Sensationalism
+- Examine whether the text uses dramatic, exaggerated, emotional, or fear-based language.
+- Score: 0 = neutral tone; 1 = mildly sensationalized; 2 = highly dramatic or emotional.
 
-4. **Naive Realism** - *Perspective Analysis*: Evaluate whether the content presents its view as the only correct one. 
-- *Dissenting View Checks*: Analyze whether differing views are acknowledged or dismissed. 
-- *Isolation Analysis*: Determine whether the article attempts to isolate readers from alternative perspectives. 
-- **Scoring:** 0 = balanced and nuanced; 1 = somewhat one-sided; 2 = fully dogmatic. 
+4. Naive Realism
+- Evaluate whether the article presents its viewpoint as the only truth, dismisses alternatives, or discourages nuance.
+- Score: 0 = balanced; 1 = somewhat one-sided; 2 = dogmatic or absolutist.
 
 ### Article to Evaluate
 {ARTICLE_TEXT}
 
 ### Task
-Provide a short explanation and a score (0–2) for each of the four factors.
+Provide a score (0–2), justification, and confidence level on a scale from 0-100% for each of the four factuality factors.
+RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+
+### Output Format:
+{{
+    "frequency_heuristic": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+    }},
+    "malicious_account": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+    }},
+    "sensationalism": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+    }},
+    "naive_realism": {{
+        "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
+    }}
+}}
+
