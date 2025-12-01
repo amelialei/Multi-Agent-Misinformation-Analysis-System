@@ -85,12 +85,12 @@ def predict_frequency_model(df, model, tfidf, count_vec, token_dict, buzzwords, 
     pred_labels = le.inverse_transform(preds)
 
     label_to_score = {
-        "true": 2,
-        "mostly-true": 2,
+        "true": 0,
+        "mostly-true": 0,
         "half-true": 1,
-        "barely-true": 0,
-        "false": 0,
-        "pants-on-fire": 0
+        "barely-true": 2,
+        "false": 2,
+        "pants-on-fire": 2
     }
 
     freq_scores = [label_to_score.get(lbl, 1) for lbl in pred_labels]
@@ -276,12 +276,12 @@ def predict_malicious_account_model(df, model, tfidf, le):
     pred_labels = le.inverse_transform(preds)
 
     label_to_score = {
-        "true": 2,
-        "mostly-true": 2,
+        "true": 0,
+        "mostly-true": 0,
         "half-true": 1,
-        "barely-true": 0,
-        "false": 0,
-        "pants-on-fire": 0
+        "barely-true": 2,
+        "false": 2,
+        "pants-on-fire": 2
     }
 
     malicious_scores = [label_to_score.get(lbl, 1) for lbl in pred_labels]
