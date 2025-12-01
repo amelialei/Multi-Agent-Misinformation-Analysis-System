@@ -245,7 +245,7 @@ def factuality_score(article_text):
 
     ### Instructions: 
     1. First, think step-by-step about the article's tone, evidence, framing, and intent. 
-    2. If helpful, call get_model_scores(article_text) to inspect the ML model predictions.
+    2. Call get_model_scores(article_text) to inspect the ML model predictions.
     3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
        and your confidence level in that assessment on a scale of 0-100%.
        If your score is different than the model_score, you must explain why you disagree. 

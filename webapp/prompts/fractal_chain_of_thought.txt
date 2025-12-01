@@ -145,7 +145,7 @@ Treat these model scores as informative context, NOT ground truth. You must reas
     identify what you missed based on the coverage and hallucination objective functions defined above. 
 2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
 a greater score for each objective function. 
-3. If helpful, call get_model_scores(article_text) to inspect the ML model predictions.
+3. Call get_model_scores(article_text) to inspect the ML model predictions.
 4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
     and your confidence level in that assessment on a scale of 0-100%.
     If your score is different than the model_score, you must explain why you disagree. 
