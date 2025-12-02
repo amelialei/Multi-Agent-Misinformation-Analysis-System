@@ -345,7 +345,7 @@ def save_to_csv(article_url, parsed):
     }
 
     df_row = pd.DataFrame([row])
-    csv_path = "results/function_calling_outputs.csv"
+    csv_path = "results/base_outputs.csv"
 
     if os.path.exists(csv_path):
         df_row.to_csv(csv_path, mode="a", header=False, index=False)
