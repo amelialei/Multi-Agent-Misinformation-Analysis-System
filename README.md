@@ -141,25 +141,22 @@ python -m src.script
 If properly installed, the example console output should contain the following:
 ```
 Datasets loaded successfully.
-Frequency model trained.
-Echo Chamber model trained.
+Frequency Heuristic model trained.
 Sensationalism model trained.
-Credibility model trained.
+Malicious Account model trained.
+Naive Realism model trained.
 
 Analyzing article...
 
 Article Analysis Results:
-URL: https://www.cnn.com/2025/10/20/politics/trump-no-kings-protests-vance-cia-analysis
-Title: AI sewage video: Trump’s response to ‘No Kings’ marches only proved the protesters’ point
-Source: www.cnn.com
-Predicted Label: mostly-true
-Frequency Score: 0.355
-Echo Chamber Class: 3
-Echo Chamber Score: 0.603
-Sensationalism Level: 0
-Sensationalism Score: 0.797
-Credibility Level: 1
-Credibility Score: 0.851
+Frequency Heuristic Level: 0
+Frequency Heuristic Score: 0.305
+Sensationalism Level: 2
+Sensationalism Score: 0.835
+Malicious Account Level: 0
+Malicious Account Score: 0.225
+Naive Realism Level: 1
+Naive Realism Score: 0.566
 ```
 
 ## Running the Web Application
