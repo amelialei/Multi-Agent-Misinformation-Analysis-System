@@ -166,7 +166,7 @@ The Flask UI lets you do the following:
 - View scores for each factuality factor
 - View reasoning and confidence percentages
 - Use a Clear button to analyze a new article
-- Automatically saves every analysis to `data_outputs.csv`
+- Automatically saves every analysis to `results/data_outputs.csv`
 
 ### 1. Navigate to the webapp directory
 ```bash
@@ -202,23 +202,26 @@ Outputs:
 - `frequency_heuristic_score` - probability of label confidence  
 
 
-### Echo Chamber Model
-Goal: Measure how concentrated topics are across political affiliations, simulating the "echo chamber" effect seen in partisan speech.  
+### Malicious Account Model
+Goal: Goal: Identify linguistic and behavioral traces aligned with inauthentic or “malicious account” behavior
 
 Features:
-- TF-IDF embeddings of statements  
-- Subject length  
-- Party alignment ratio per topic  
-- Political relevance flag (`is_political`)  
+- TF-IDF mean  
+- Average token length
+- Repitition score
+- Link count
+- Hashtag + mention count
+- Punctuation ratio
+- Uppercase ratio
 
-Model: `XGBClassifier`
+Model: `RandomForestClassifier` within a `scikit-learn` Pipeline using `StandardScaler` 
 
 Outputs:
-- `predicted_echo_class`
-- `echo_chamber_score` - probability-based score of ideological clustering  
+- `predicted_malicious_account`
+- `malicious_account_score` - probability of label confidence
 
 ### Sensationalism Model
-Goal: Identify emotional, exaggerated, or dramatic tones that make a statement "sensational."
+Goal: Identify emotional, exaggerated, or dramatic tones that make a statement "sensational".
 
 Features:
 - Exclamation count (`!`)  
@@ -230,18 +233,17 @@ Features:
 Model: `XGBoost` within a `scikit-learn` Pipeline using `ColumnTransformer`  
 Outputs:
 - `predicted_sensationalism`
-- `sensationalism_score` - numeric probability for sensational tone  
+- `sensationalism_score` - probability of label confidence
 
-### Credibility Model
-Goal: Assess the trustworthiness of a statement based on speaker background, expertise, and tone.  
+### Naive Realism Model
+Goal: Measure how strongly a statement presents opinion as fact through absolutist phrasing, lack of hedging, and dismissive language.
 
 Features:
-- TF-IDF representation of the statement text  
-- Speaker expertise level  
-- Political party encoding  
-- Subjectivity score 
+- Absolute-language ratio
+- Cautious-language ratio
+- Dismissive term count
 
 Model: `XGBoost` Pipeline  
 Outputs:
-- `predicted_credibility`
-- `credibility_score` - predicted probability of a credible statement  
+- `predicted_naive_realism`
+- `naive_realism_score` - probability of label confidence
