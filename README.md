@@ -18,19 +18,19 @@ DSC180A-Q1Project/
 │   ├── article.txt                   # Article text for ingestion
 │   ├── ground_truth.csv              # Hand-labeled articles with appropriate factuality factor scores
 │   ├── politifact.csv                # Manually scraped data from Politifact.org to augment LIAR-PLUS dataset
-│   ├── train_set.csv / train2.tsv
-│   ├── val_set.csv   / val2.tsv
-│   └── test_set.csv  / test2.tsv
+│   ├── train_set.csv                 # Training set with new scraped data
+│   ├── train2.tsv                    # Original LiarPLUS train set
+│   ├── val_set.csv                   # Validation set with new scraped data
+│   ├── val2.tsv                      # Original LiarPLUS validation set
+│   ├── test_set.csv                  # Test set with new scraped data
+│   └── test2.tsv                     # Original LiarPLUS test set
 │
 ├── notebooks/
 │   ├── eda_visualization.ipynb       # Exploratory visualizations for LIAR-PLUS dataset
-│   ├── model_accuracy.ipynb          # Various accuracy scores for baseline models
-│   ├── prompting.ipynb               # Contains 20 incremental prompts refining the model and ending with function calling
-│   ├── scraped_data.ipynb            # Additonal scraped data from outside sources
-│   └── hand_labels_template.csv
-│
-├── research/                         # Final capstone research report
-│   └── DSC180A_Capstone_Report.pdf
+│   ├── metrics.ipynb                 # Accuracy scores for predictive models and LLM models
+│   ├── model_accuracy.ipynb          # Various performance metrics for baseline predictive models
+│   ├── prompting.ipynb               # Contains 20 incremental prompts refining the model 
+│   └── scraped_data.ipynb            # Additonal scraped data from Politifact added to LiarPLUS
 │
 ├── src/                              # Core project source code
 │   ├── __init__.py
@@ -41,7 +41,14 @@ DSC180A-Q1Project/
 │
 ├── webapp/                           # Flask-based UI for demo interactions
 │   ├── app.py                        # Flask entrypoint
-│   ├── data_outputs.csv              # Outputs saved from UI interactions
+|   ├── prompts/
+│   │   ├── base.txt                      # Base prompt for LLM 
+│   │   ├── chain_of_thought.txt          # LLM prompt incorporating chain of thought
+│   │   └── factal_chain_of_thought.txt   # LLM prompt incorporating fractal chain of thought
+|   ├── results/
+│   │   ├── base_outputs.csv              # Outputs saved from running LLM with base prompt
+│   │   ├── cot_outputs.csv               # Outputs saved from running LLM with chain of thought prompt
+│   │   └── fcot_outputs.csv              # Outputs saved from running LLM with fractal chain of thought prompt
 │   ├── static/
 │   │   └── style.css                 # CSS styling for UI
 │   └── templates/
@@ -53,15 +60,16 @@ DSC180A-Q1Project/
 ```
 
 ## Dataset
-This project uses the LIAR-PLUS dataset, an extended version of the original LIAR dataset.
+This project uses the LIAR-PLUS dataset, an extended version of the original LIAR dataset. We augmented this dataset with more recent
+scraped data from PolitiFact.
 This includes labeled political statements along with metadata such as subjects, speakers, party affiliations, and justifications.
 
 ### Dataset Summary
 | Split | File | Description |
 |-------|------|--------------|
-| **Train** | `train2.tsv` | Used to train all factuality models. |
-| **Validation** | `val2.tsv` | Used for tuning and intermediate evaluation. |
-| **Test** | `test2.tsv` | Used for final evaluation and analysis. |
+| **Train** | `train_set.csv` | Used to train all factuality models. |
+| **Validation** | `val_set.csv` | Used for tuning and intermediate evaluation. |
+| **Test** | `test_set.csv` | Used for final evaluation and analysis. |
 
 ## Installation
 
@@ -133,25 +141,22 @@ python -m src.script
 If properly installed, the example console output should contain the following:
 ```
 Datasets loaded successfully.
-Frequency model trained.
-Echo Chamber model trained.
+Frequency Heuristic model trained.
 Sensationalism model trained.
-Credibility model trained.
+Malicious Account model trained.
+Naive Realism model trained.
 
 Analyzing article...
 
 Article Analysis Results:
-URL: https://www.cnn.com/2025/10/20/politics/trump-no-kings-protests-vance-cia-analysis
-Title: AI sewage video: Trump’s response to ‘No Kings’ marches only proved the protesters’ point
-Source: www.cnn.com
-Predicted Label: mostly-true
-Frequency Score: 0.355
-Echo Chamber Class: 3
-Echo Chamber Score: 0.603
-Sensationalism Level: 0
-Sensationalism Score: 0.797
-Credibility Level: 1
-Credibility Score: 0.851
+Frequency Heuristic Level: 0
+Frequency Heuristic Score: 0.305
+Sensationalism Level: 2
+Sensationalism Score: 0.835
+Malicious Account Level: 0
+Malicious Account Score: 0.225
+Naive Realism Level: 1
+Naive Realism Score: 0.566
 ```
 
 ## Running the Web Application
@@ -161,7 +166,7 @@ The Flask UI lets you do the following:
 - View scores for each factuality factor
 - View reasoning and confidence percentages
 - Use a Clear button to analyze a new article
-- Automatically saves every analysis to `data_outputs.csv`
+- Automatically saves every analysis to `results/data_outputs.csv`
 
 ### 1. Navigate to the webapp directory
 ```bash
@@ -197,23 +202,26 @@ Outputs:
 - `frequency_heuristic_score` - probability of label confidence  
 
 
-### Echo Chamber Model
-Goal: Measure how concentrated topics are across political affiliations, simulating the "echo chamber" effect seen in partisan speech.  
+### Malicious Account Model
+Goal: Goal: Identify linguistic and behavioral traces aligned with inauthentic or “malicious account” behavior
 
 Features:
-- TF-IDF embeddings of statements  
-- Subject length  
-- Party alignment ratio per topic  
-- Political relevance flag (`is_political`)  
+- TF-IDF mean  
+- Average token length
+- Repitition score
+- Link count
+- Hashtag + mention count
+- Punctuation ratio
+- Uppercase ratio
 
-Model: `XGBClassifier`
+Model: `RandomForestClassifier` within a `scikit-learn` Pipeline using `StandardScaler` 
 
 Outputs:
-- `predicted_echo_class`
-- `echo_chamber_score` - probability-based score of ideological clustering  
+- `predicted_malicious_account`
+- `malicious_account_score` - probability of label confidence
 
 ### Sensationalism Model
-Goal: Identify emotional, exaggerated, or dramatic tones that make a statement "sensational."
+Goal: Identify emotional, exaggerated, or dramatic tones that make a statement "sensational".
 
 Features:
 - Exclamation count (`!`)  
@@ -225,18 +233,17 @@ Features:
 Model: `XGBoost` within a `scikit-learn` Pipeline using `ColumnTransformer`  
 Outputs:
 - `predicted_sensationalism`
-- `sensationalism_score` - numeric probability for sensational tone  
+- `sensationalism_score` - probability of label confidence
 
-### Credibility Model
-Goal: Assess the trustworthiness of a statement based on speaker background, expertise, and tone.  
+### Naive Realism Model
+Goal: Measure how strongly a statement presents opinion as fact through absolutist phrasing, lack of hedging, and dismissive language.
 
 Features:
-- TF-IDF representation of the statement text  
-- Speaker expertise level  
-- Political party encoding  
-- Subjectivity score 
+- Absolute-language ratio
+- Cautious-language ratio
+- Dismissive term count
 
 Model: `XGBoost` Pipeline  
 Outputs:
-- `predicted_credibility`
-- `credibility_score` - predicted probability of a credible statement  
+- `predicted_naive_realism`
+- `naive_realism_score` - probability of label confidence
