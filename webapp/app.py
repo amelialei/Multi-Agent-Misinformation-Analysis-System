@@ -348,7 +348,7 @@ def save_to_csv(article_url, parsed):
     }
 
     df_row = pd.DataFrame([row])
-    csv_path = "results/new_fcot_outputs.csv"
+    csv_path = "results/data_outputs.csv"
 
     if os.path.exists(csv_path):
         df_row.to_csv(csv_path, mode="a", header=False, index=False)
