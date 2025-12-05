@@ -6,7 +6,7 @@ We use the LIAR-PLUS dataset to train separate models for:
 
 - Frequency Heuristics - detecting repetition, buzzwords, and linguistic patterns that artificially enhance “truthiness.”
 - Sensationalism - identifying emotionally charged, exaggerated, or dramatic rhetoric.
-- Malicious Account Patterns – detecting linguistic markers commonly associated with bot-like or spammy messaging.
+- Malicious Account – detecting linguistic markers commonly associated with bot-like or spammy messaging.
 - Naive Realism – capturing absolutist, polarized, or dismissive language that reflects cognitive bias
 
 Each model captures a unique dimension of factuality, contributing to a broader framework for automated fact-checking.
