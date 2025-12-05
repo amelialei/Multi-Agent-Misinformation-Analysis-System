@@ -247,3 +247,5 @@ Model: `XGBoost` Pipeline
 Outputs:
 - `predicted_naive_realism`
 - `naive_realism_score` - probability of label confidence
+
+## Note on Exploratory Models and Methodology Evolution
