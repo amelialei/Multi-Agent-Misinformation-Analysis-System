@@ -249,3 +249,6 @@ Outputs:
 - `naive_realism_score` - probability of label confidence
 
 ## Note on Exploratory Models and Methodology Evolution
+
+During the early stages of this project, our team explored a broader set of factuality factors through exploratory data analysis and experimental modeling found within the `eda_visualization.ipynb` notebook. This notebook includes preliminary implementations of **Credibility** and **Echo Chamber** models, along with earlier versions of the **Frequency Heuristic** and **Sensationalism** models.
+
