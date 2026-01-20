@@ -1,4 +1,4 @@
-# DSC180A Capstone Project - Narrative Integrity Analyzer
+# DSC180A Capstone Project - Multi-Agent Misinformation Analysis System
 
 ## Overview
 This project aims to mitigate the gap of truth identification in an era where bias and sensationalism are prevalent in the political landscape through the use of mutliple factuality factors.
