@@ -4,10 +4,11 @@ freq_heuristic_agent = LlmAgent(
     model='gemini-2.5-flash',
     name='freq_heuristic_agent',
     description='Analyzes an article for repetition, a traceable origin, and evidence verification, '
-    'and gives it a frequency heuristic score from 0-2 based on the analysis.',
+    'and gives it a frequency heuristic score from 0-2 based on analysis.',
     instruction="""
     You are an expert in misinformation and disinformation detection, scoring, and ranking. 
-    Your task is to analyze the given article and score the strength of frequency-based heuristics. 
+    Your task is to analyze the given article and score the strength of frequency-based heuristics
+    using your analysis.
     ---
 
     ## Frequency Heuristic Definition

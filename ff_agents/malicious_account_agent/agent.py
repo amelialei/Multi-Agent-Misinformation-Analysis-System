@@ -7,8 +7,8 @@ malicious_acc_agent = LlmAgent(
     'from 0-2 based on the analysis.',
     instruction="""
     You are an expert in misinformation and disinformation detection, scoring, and ranking. Your task 
-    is to analyze the given article and score how malicious the accounts referenced, interactions, and
-    content is. 
+    is to analyze the given article and score the strength of malicious account indicators using your 
+    analysis. 
     ---
 
     ## Malicious Account Definition 
