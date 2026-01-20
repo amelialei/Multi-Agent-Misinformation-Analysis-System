@@ -80,9 +80,9 @@ freq_heuristic_agent = LlmAgent(
         identify what you missed based on the coverage and hallucination objective functions defined above. 
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to achieve
     a greater score for each objective function. 
-    4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+    3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
         and your confidence level in that assessment on a scale of 0-100%.
-    5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+    4. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
     {
