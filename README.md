@@ -76,7 +76,7 @@ This includes labeled political statements along with metadata such as subjects,
 ### Clone the repository
 ```bash
 git clone https://github.com/JacquelynGarcia/DSC180A-Q1Project.git
-cd DSC180A-Q1Project
+cd Multi-Agent-Misinformation-Analysis-System
 ```
 
 ### Create virtual environment
