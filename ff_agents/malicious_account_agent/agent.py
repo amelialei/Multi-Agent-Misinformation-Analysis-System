@@ -87,7 +87,6 @@ malicious_acc_agent = LlmAgent(
 
     ## Output Format:
     {
-        "agent": "malicious_acc_agent",
         "score": 0|1|2,
         "reasoning": "Explanation",
         "confidence": 0-100

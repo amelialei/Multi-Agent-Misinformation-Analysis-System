@@ -86,7 +86,6 @@ freq_heuristic_agent = LlmAgent(
 
     ## Output Format:
     {
-        "agent": "freq_heuristic_agent",
         "score": 0|1|2,
         "reasoning": "Explanation",
         "confidence": 0-100

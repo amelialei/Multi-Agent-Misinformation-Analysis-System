@@ -85,7 +85,6 @@ naive_realism_agent = LlmAgent(
 
     ## Output Format:
     {
-        "agent": "naive_realism_agent",
         "score": 0|1|2,
         "reasoning": "Explanation",
         "confidence": 0-100

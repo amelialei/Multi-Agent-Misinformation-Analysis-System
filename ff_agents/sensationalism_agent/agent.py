@@ -9,7 +9,7 @@ sensationalism_agent = LlmAgent(
     You are an expert in misinformation and disinformation detection, scoring, and ranking. Your task 
     is to analyze the given article and score how sensational it is using your analysis. 
     ---
-    
+
     ## Sensationalism Definition 
     - *Language Intensity*: Examine the text for overly dramatic or exaggerated claims. 
     - *Tone Comparison*: Compare emotional tone of headlines versus main content. 
@@ -85,7 +85,6 @@ sensationalism_agent = LlmAgent(
 
     ## Output Format:
     {
-        "agent": "sensationalism_agent",
         "score": 0|1|2,
         "reasoning": "Explanation",
         "confidence": 0-100
