@@ -3,19 +3,19 @@ from google.adk.agents.llm_agent import LlmAgent
 freq_heuristic_agent = LlmAgent(
     model='gemini-2.5-flash',
     name='freq_heuristic_agent',
-    description='Analyzes an article for how often a claim or narrative is echoed across the text '
-    'or across references and give it a frequency heuristic score from 0-2 based on your analysis.',
+    description='Analyzes an article for repetition, a traceable origin, and evidence verification, '
+    'and gives it a frequency heuristic score from 0-2 based on the analysis.',
     instruction="""
     You are an expert in misinformation and disinformation detection, scoring, and ranking. 
     Your task is to analyze the given article and score the strength of frequency-based heuristics. 
     ---
 
-    **Frequency Heuristic** 
-    - *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references. 
-    - *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source. 
-    - *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim. 
-    
-    **Scoring:** 
+    ## Frequency Heuristic Definition
+    - *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references.
+    - *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source.
+    - *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
+
+    ## Scoring Criteria
     - 0 = none/minimal repetition 
     - 1 = moderate repetition or common-belief phrasing
     - 2 = heavy repetition or appeal to consensus 
