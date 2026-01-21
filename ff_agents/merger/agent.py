@@ -27,7 +27,7 @@ merger_agent = LlmAgent(
         "frequency_heuristic": {frequency_heuristic_analysis},
         "malicious_account": {malicious_account_analysis},
         "naive_realism": {naive_realism_analysis},
-        "sensationalism": {sensationalism_analysis
+        "sensationalism": {sensationalism_analysis}
     }
 
     Output *only* the structured JSON object as specified above. Do not include introductory or concluding 
