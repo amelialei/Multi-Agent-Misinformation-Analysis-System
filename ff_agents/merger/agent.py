@@ -1,8 +1,14 @@
 from google.adk.agents import LlmAgent
 
-root_agent = LlmAgent(
+merger_agent = LlmAgent(
     model='gemini-2.5-flash',
-    name='root_agent',
+    name='merger_agent',
     description='A helpful assistant for user questions.',
-    instruction='Answer user questions to the best of your knowledge',
+    # instruction="""
+    # You are an AI assistant responible for combining analysis results into a structured report.
+
+    # Your primary task is to 
+
+
+    # """,
 )

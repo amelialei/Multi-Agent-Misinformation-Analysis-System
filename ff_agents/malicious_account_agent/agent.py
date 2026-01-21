@@ -92,4 +92,5 @@ malicious_acc_agent = LlmAgent(
         "confidence": 0-100
     }
     """,
+    output_key='malicious_account_analysis'
 )

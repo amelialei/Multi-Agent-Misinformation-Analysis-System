@@ -90,4 +90,5 @@ naive_realism_agent = LlmAgent(
         "confidence": 0-100
     }
     """,
+    output_key='naive_realism_analysis'
 )

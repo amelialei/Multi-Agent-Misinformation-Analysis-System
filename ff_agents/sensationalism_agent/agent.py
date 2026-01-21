@@ -90,4 +90,5 @@ sensationalism_agent = LlmAgent(
         "confidence": 0-100
     }
     """,
+    output_key='sensationalism_analysis'
 )

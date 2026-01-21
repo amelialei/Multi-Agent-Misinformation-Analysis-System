@@ -91,4 +91,5 @@ freq_heuristic_agent = LlmAgent(
         "confidence": 0-100
     }
     """,
+    output_key='frequency_heuristic_analysis'
 )
