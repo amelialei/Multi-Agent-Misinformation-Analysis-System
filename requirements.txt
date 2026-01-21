@@ -20,4 +20,5 @@ google-genai
 python-dotenv
 flask==3.0.3
 torch==2.3.1
+google-adk
 
