@@ -1,4 +1,4 @@
-from google.adk.agents.llm_agent import LlmAgent
+from google.adk.agents import LlmAgent
 
 malicious_acc_agent = LlmAgent(
     model='gemini-2.5-flash',
