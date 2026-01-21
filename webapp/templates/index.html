@@ -1,25 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NIA</title>
+    <title>Multi-Agent Misinformation Analysis System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
             margin: 0;
             padding: 40px;
-            display: flex;
-            justify-content: center;
             color: #e5e5e5;
-        }
-
-        .container {
-            max-width: 900px;
-            width: 100%;
-            background: #1e1e1e;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
 
         h1 {
@@ -29,28 +18,35 @@
             color: #ffffff;
         }
 
-        input[type="text"] {
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        }
+
+        input[type="text"], textarea {
             width: 100%;
             padding: 12px;
-            margin-bottom: 16px;
             border-radius: 8px;
             border: 1px solid #444;
             background: #2a2a2a;
             color: #e5e5e5;
             font-size: 16px;
+            margin-bottom: 16px;
         }
 
         textarea {
-            width: 100%;
-            height: 300px;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #444;
-            background: #2a2a2a;
-            color: #e5e5e5;
-            border-radius: 8px;
+            height: 250px;
             resize: vertical;
-            margin-bottom: 20px;
         }
 
         .button-row {
@@ -61,7 +57,7 @@
         }
 
         button {
-            padding: 12px 40px;
+            padding: 12px 30px;
             font-size: 16px;
             border: none;
             border-radius: 8px;
@@ -131,27 +127,47 @@
             font-size: 15px;
             line-height: 1.3;
         }
+
+        .overall-score {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .synopsis {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .baseline-image {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
     </style>
 </head>
 
 <body>
+    <h1>Multi-Agent Misinformation Analysis System</h1>
     <div class="container">
-        <h1>Narrative Integrity Analyzer</h1>
+        <div class="left-panel">
+            <form id="articleForm">
+                <input type="text" name="article_url" id="articleURL" placeholder="Paste Article URL">
+                <textarea name="article" id="articleInput" placeholder="Paste your article text here..."></textarea>
+                <div class="button-row">
+                    <button type="submit" id="analyzeBtn">Analyze</button>
+                    <button type="button" id="clearBtn">Clear</button>
+                </div>
+            </form>
+            <img src="baseline_research.png" alt="Baseline Research" class="baseline-image">
+        </div>
 
-        <form id="articleForm">
-            <input type="text" name="article_url" id="articleURL" placeholder="Paste Article URL">
-
-            <textarea name="article" id="articleInput" placeholder="Paste your article text here..."></textarea>
-
-            <div class="button-row">
-                <button type="submit" id="analyzeBtn">Analyze</button>
-                <button type="button" id="clearBtn">Clear</button>
+        <div class="right-panel">
+            <div class="spinner" id="spinner"></div>
+            <div id="result">
+                <!-- Overall score, synopsis, and table will appear here -->
             </div>
-        </form>
-
-        <div class="spinner" id="spinner"></div>
-
-        <div id="result"></div>
+        </div>
     </div>
 
 <script>
@@ -180,18 +196,30 @@ document.getElementById("articleForm").addEventListener("submit", async (e) => {
         if (data.error) {
             resultDiv.innerHTML = "Error: " + data.error;
         } else {
+            // Compute overall score
+            const scores = [
+                data.frequency_heuristic.score,
+                data.malicious_account.score,
+                data.sensationalism.score,
+                data.naive_realism.score
+            ];
+            const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+            const ratingMap = ["Misleading","Slightly Misleading","Neutral","Slightly Accurate","Incredibly Accurate"];
+            const overallRating = ratingMap[avg*2] || "Neutral"; // map 0-2 to 5-scale
 
             let html = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Factuality Factor</th>
-                        <th>Score</th>
-                        <th>Reasoning</th>
-                        <th>Confidence</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <div class="overall-score">This article is: ${overallRating}</div>
+                <div class="synopsis"><b>Synopsis:</b> ${data.synopsis || "Summary not available"}</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factuality Factor</th>
+                            <th>Score</th>
+                            <th>Reasoning</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             `;
 
             function row(name, obj) {
@@ -208,8 +236,8 @@ document.getElementById("articleForm").addEventListener("submit", async (e) => {
             html += row("Malicious Account", data.malicious_account);
             html += row("Sensationalism", data.sensationalism);
             html += row("Naive Realism", data.naive_realism);
-
             html += "</tbody></table>";
+
             resultDiv.innerHTML = html;
         }
     } catch (err) {
@@ -227,6 +255,5 @@ document.getElementById("clearBtn").addEventListener("click", () => {
     document.getElementById("result").innerHTML = "";
 });
 </script>
-
 </body>
 </html>
