@@ -65,16 +65,15 @@ malicious_acc_agent = LlmAgent(
     ## Dual Objective Functions
     Your reasoning and scoring must optimize **both** of the following objectives:
 
-    ### **Objective 1: MAXIMIZE Coverage**
-    - Comprehensively assess all aspects of each factuality factor across the entire article
-    - Evaluate EVERY source, citation, and attribution mentioned in the article.
-    - Formula: (Number of sentences examined for each factor) / (Total sentences in article) × 100%
-        - Target: Achieve 100% - every sentence must be thoroughly examined. 
+    ### **Objective 1: MAXIMIZE Source reputation**
+    - Identify if the source/account has a track record of deveptive behavior or spreading misinformation
+    - Formula: (Number of indicators of historical deceptive behavior) / (Total indicators analyzed) × 100%
 
-    ### **Objective 2: MINIMIZE Hallucinations**
-    - Only cite evidence that exists in the article text. Avoid inferring, assuming, or fabricating patterns.
-    - **Hallucination Check Formula**: (Number of claims WITH direct textual quotes) / (Total claims made) × 100%
-        - Target: Achieve 100% - every claim must be grounded in actual article text.
+    ### **Objective 2: MINIMIZE Unjustified malicious flags**
+    - Do not label sources as malicious without supporting evidence from account analysis
+    - Each malicious flag must be supported by evidence of coordination/inauthentic behavior
+    history of spreading false or harmful information
+    - Formula: (Number of malicious flags WITH strong supporting evidence) / (Total malicious flags made) × 100%
 
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,

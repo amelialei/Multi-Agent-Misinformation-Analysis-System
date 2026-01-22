@@ -63,16 +63,18 @@ naive_realism_agent = LlmAgent(
     ## Dual Objective Functions
     Your reasoning and scoring must optimize **both** of the following objectives:
 
-    ### **Objective 1: MAXIMIZE Coverage**
-    - Comprehensively assess all aspects of each factuality factor across the entire article
-    - Review ALL perspectives presented (or missing) and instances of one-sided framing. 
-    - Formula: (Number of sentences examined for each factor) / (Total sentences in article) × 100%
-        - Target: Achieve 100% - every sentence must be thoroughly examined. 
+    ### **Objective 1: MAXIMIZE dismissal of alternative perspectives**
+    - Identify and evaluate every instance where the article:
+        - presents its perspective as the only valid one 
+        - dismisses or ignores dissenting views
+        - ommitts meaningful counter-arguments when making claims 
+        - attempts to isolate readers from outside information 
+    - Formula: (Number of dismissive/isolating instances) / (Total sentences in article) × 100%
 
-    ### **Objective 2: MINIMIZE Hallucinations**
-    - Only cite evidence that exists in the article text. Avoid inferring, assuming, or fabricating patterns.
-    - **Hallucination Check Formula**: (Number of claims WITH direct textual quotes) / (Total claims made) × 100%
-        - Target: Achieve 100% - every claim must be grounded in actual article text.
+    ### **Objective 2: MINIMIZE penalizing legitamite consensus**
+    - Do not flag an article for naive realism simply because it:
+        - states widely accepted facts or expert consensus
+        - uses confident language for well-supported and cited claims 
 
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,

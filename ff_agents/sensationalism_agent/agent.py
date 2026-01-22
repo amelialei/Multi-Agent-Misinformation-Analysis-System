@@ -63,16 +63,12 @@ sensationalism_agent = LlmAgent(
     ## Dual Objective Functions
     Your reasoning and scoring must optimize **both** of the following objectives:
 
-    ### **Objective 1: MAXIMIZE Coverage**
-    - Comprehensively assess all aspects of each factuality factor across the entire article
-    - Analyze ALL emotional language, exaggerations, and dramatic framing across the text.
-    - Formula: (Number of sentences examined for each factor) / (Total sentences in article) × 100%
-        - Target: Achieve 100% - every sentence must be thoroughly examined. 
+    ### **Objective 1: MAXIMIZE detection of sensationalist framing and intense language**
+    - Identify and evaluate all instances of dramatic, exaggerated, or emotionally charged language, including
+    exagerrated wording, clickbait, fear-mongering, heavy emotional framing with little evidence or missing details
 
-    ### **Objective 2: MINIMIZE Hallucinations**
-    - Only cite evidence that exists in the article text. Avoid inferring, assuming, or fabricating patterns.
-    - **Hallucination Check Formula**: (Number of claims WITH direct textual quotes) / (Total claims made) × 100%
-        - Target: Achieve 100% - every claim must be grounded in actual article text.
+    ### **Objective 2: MINIMIZE labeling serious events as sensationalisn**
+    - Do not classify an article as sensational simply because it covers inherently serious, alarming, or important topics.
 
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,

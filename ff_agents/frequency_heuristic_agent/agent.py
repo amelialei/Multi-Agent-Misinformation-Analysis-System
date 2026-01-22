@@ -64,16 +64,19 @@ freq_heuristic_agent = LlmAgent(
     ## Dual Objective Function
     Your reasoning and scoring must optimize **both** of the following objectives:
 
-    ### **Objective 1: MAXIMIZE Coverage**
-    - Comprehensively assess all aspects of each factuality factor across the entire article
-    - Check ALL instances of repeated claims and popularity appeals throughout the article.
-    - Formula: (Number of sentences examined for each factor) / (Total sentences in article) × 100%
-        - Target: Achieve 100% - every sentence must be thoroughly examined. 
+    ### **Objective 1: MAXIMIZE detecting linguistic attempts for substituting repition or popularity as factual evidence**
+    - Scan every sentence for phrases that imply common belief or consense
+    - Formula: (Number of identified repetition/popularity phrases) / (Total claims) × 100%
 
-    ### **Objective 2: MINIMIZE Hallucinations**
-    - Only cite evidence that exists in the article text. Avoid inferring, assuming, or fabricating patterns.
-    - **Hallucination Check Formula**: (Number of claims WITH direct textual quotes) / (Total claims made) × 100%
-        - Target: Achieve 100% - every claim must be grounded in actual article text.
+    ### **Objective 2: MINIMIZE Unverifiable claims**
+    - Every claim must be verified by a credible source
+    - A claim is considered verifiable if it includes at least one of the following:
+        - Direct quote from a named expert or authority
+        - Citation of a reputable study or report
+        - Named, identifiable source or institution
+        - Specific documents, datasets, events, or facts
+    - A claim is considered unverifiable if it relies on anonymous sources 
+    - Formula: (Number of unverifiable claims) / (Total claims) × 100%
 
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
