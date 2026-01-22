@@ -144,6 +144,30 @@
             margin-top: 20px;
             border-radius: 8px;
         }
+
+        .prompting-table {
+        width: 100%;
+        margin-top: 16px;
+        border-collapse: collapse;
+        background: #2a2a2a;
+        font-size: 14px;
+        }
+
+        .prompting-table th,
+        .prompting-table td {
+        border: 1px solid #444;
+        padding: 10px;
+        text-align: center;
+        }
+
+        .prompting-table th {
+        background-color: #333;
+        font-weight: bold;
+        }
+
+        .prompting-table tr:hover {
+        background-color: #3a3a3a;
+        }
     </style>
 </head>
 
@@ -159,7 +183,44 @@
                     <button type="button" id="clearBtn">Clear</button>
                 </div>
             </form>
-            <img src="baseline_research.png" alt="Baseline Research" class="baseline-image">
+            <h3 style="margin-top: 30px; text-align:center;">
+                Prompting Method Performance
+            </h3>
+            
+            <table class="prompting-table">
+                <thead>
+                    <tr>
+                        <th>Prompting Method</th>
+                        <th>Frequency Heuristic</th>
+                        <th>Malicious Account</th>
+                        <th>Sensationalism</th>
+                        <th>Naive Realism</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Base Prompt</b></td>
+                        <td>0.60</td>
+                        <td>0.80</td>
+                        <td>0.45</td>
+                        <td>0.60</td>
+                    </tr>
+                    <tr>
+                        <td><b>ICL + Chain-of-Thought</b></td>
+                        <td>0.70</td>
+                        <td>0.50</td>
+                        <td>0.35</td>
+                        <td>0.45</td>
+                    </tr>
+                    <tr>
+                        <td><b>Function Calling + Fractal CoT</b></td>
+                        <td>0.55</td>
+                        <td>0.55</td>
+                        <td>0.60</td>
+                        <td>0.70</td>
+                    </tr>
+                </tbody>
+            </table>            
         </div>
 
         <div class="right-panel">
