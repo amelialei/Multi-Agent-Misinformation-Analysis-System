@@ -347,62 +347,76 @@ document.getElementById("clearBtn").addEventListener("click", () => {
     const ctx = document.getElementById('promptRadarChart');
     
     new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: [
-                'Frequency Heuristic',
-                'Malicious Account',
-                'Sensationalism',
-                'Naive Realism'
-            ],
-            datasets: [
-                {
-                    label: 'Base Prompt',
-                    data: [0.60, 0.80, 0.45, 0.60],
-                    borderWidth: 2
+    type: 'radar',
+    data: {
+        labels: [
+            'Frequency Heuristic',
+            'Malicious Account',
+            'Sensationalism',
+            'Naive Realism'
+        ],
+        datasets: [
+            {
+                label: 'Base Prompt',
+                data: [0.60, 0.80, 0.45, 0.60],
+                borderWidth: 2,
+                pointRadius: 4,         // normal point size
+                pointHoverRadius: 8     // size on hover
+            },
+            {
+                label: 'ICL + CoT',
+                data: [0.70, 0.50, 0.35, 0.45],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'Fractal CoT',
+                data: [0.55, 0.55, 0.60, 0.70],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            r: {
+                min: 0,
+                max: 1,
+                ticks: {
+                    stepSize: 0.2,
+                    color: '#ccc'
                 },
-                {
-                    label: 'ICL + CoT',
-                    data: [0.70, 0.50, 0.35, 0.45],
-                    borderWidth: 2
+                grid: {
+                    color: '#444'
                 },
-                {
-                    label: 'Fractal CoT',
-                    data: [0.55, 0.55, 0.60, 0.70],
-                    borderWidth: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                r: {
-                    min: 0,
-                    max: 1,
-                    ticks: {
-                        stepSize: 0.2,
-                        color: '#ccc'
-                    },
-                    grid: {
-                        color: '#444'
-                    },
-                    pointLabels: {
-                        color: '#eee',
-                        font: {
-                            size: 13
-                        }
+                pointLabels: {
+                    color: '#eee',
+                    font: {
+                        size: 13
                     }
                 }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#eee'
+                }
             },
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#eee'
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    label: function(context) {
+                        return `${context.dataset.label}: ${context.formattedValue}`;
                     }
                 }
             }
         }
-    });
+    }
+});
     </script>    
 </body>
 </html>
