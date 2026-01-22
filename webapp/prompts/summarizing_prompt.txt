@@ -175,6 +175,11 @@ You are an expert in misinformation and disinformation detection, scoring, and r
 
     ## Output Format:
     {{
+        "overall_assessment": {{
+            "score": 0|1|2,
+            "label": "Misleading | Mixed / Potentially Misleading | Mostly Accurate",
+            "reasoning": "2–3 sentence neutral summary of the article’s credibility and reliability"
+        }},
         "frequency_heuristic": {{
             "score": 0|1|2,
             "reasoning": "Explanation",
