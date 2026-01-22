@@ -5,6 +5,7 @@ from malicious_account_agent.agent import malicious_acc_agent
 from naive_realism_agent.agent import naive_realism_agent
 from sensationalism_agent.agent import sensationalism_agent
 from merger_agent.agent import merger_agent
+from claim_extraction_agent.agent import claim_extraction_agent
 
 parallel_analysis_agent = ParallelAgent(
     name='parallel_analysis_agent',
@@ -19,7 +20,7 @@ parallel_analysis_agent = ParallelAgent(
 
 root_agent = SequentialAgent(
     name='root_agent',
-    sub_agents=[parallel_analysis_agent, merger_agent],
-    description='Coordinates parallel research and synthesizes the results.',
+    sub_agents=[claim_extraction_agent, parallel_analysis_agent, merger_agent],
+    description='Coordinates claim extraction, parallel factuality analysis, and synthesis.',
 )
 
