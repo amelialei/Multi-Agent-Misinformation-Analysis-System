@@ -177,7 +177,7 @@ You are an expert in misinformation and disinformation detection, scoring, and r
     {{
         "overall_assessment": {{
             "score": 0|1|2,
-            "label": "Misleading | Mixed / Potentially Misleading | Mostly Accurate",
+            "label": "pants-fire" | "false" | "mostly-false" | "half-true" | "mostly-true" | "true",
             "reasoning": "2–3 sentence neutral summary of the article’s credibility and reliability"
         }},
         "frequency_heuristic": {{
