@@ -85,7 +85,7 @@ freq_heuristic_agent = LlmAgent(
 
     ## Tool you can call
     You have access to a function called `get_frequency_heuristic_prediction(text: str)` which returns
-    a sensationalism model predictin for the given text in the following structure:
+    a frequency heuristic ML model prediction for the given text in the following structure:
 
     {
         "status": "success",

@@ -77,7 +77,7 @@ sensationalism_agent = LlmAgent(
 
     ## Tool you can call
     You have access to a function called `get_sensationalism_prediction(text: str)` which returns
-    a sensationalism model predictin for the given text in the following structure:
+    a sensationalism ML model prediction for the given text in the following structure:
 
     {
         "status": "success",
