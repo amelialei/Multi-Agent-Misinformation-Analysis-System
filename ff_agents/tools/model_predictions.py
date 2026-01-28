@@ -1,9 +1,3 @@
-"""
-Tool functions that wrap predictive models for use by ADK agents.
-Each function takes text (article or statement) and returns model scores as dicts.
-Models are loaded and cached on first use.
-"""
-
 import json
 import os
 import sys
