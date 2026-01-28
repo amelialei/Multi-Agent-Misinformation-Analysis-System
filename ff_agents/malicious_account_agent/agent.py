@@ -1,5 +1,10 @@
 from google.adk.agents import LlmAgent
 
+try:
+    from tools.model_predictions import get_malicious_account_prediction
+except ImportError:
+    from ff_agents.tools.model_predictions import get_malicious_account_prediction
+
 malicious_acc_agent = LlmAgent(
     model='gemini-2.5-flash',
     name='malicious_acc_agent',
@@ -75,14 +80,28 @@ malicious_acc_agent = LlmAgent(
     history of spreading false or harmful information
     - Formula: (Number of malicious flags WITH strong supporting evidence) / (Total malicious flags made) × 100%
 
+    ## Tool you can call
+    You have access to a function called `get_malicious_account_prediction(text: str)` which returns
+    a sensationalism model predictin for the given text in the following structure:
+
+    {
+        "status": "success",
+        "score": 0|1|2,
+        "confidence": float,
+    }
+
+    Treat these model scores as informative context, NOT ground truth. You must reason independently.
+
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
-        identify what you missed based on the coverage and hallucination objective functions defined above. 
+    identify what you missed based on the coverage and hallucination objective functions defined above. 
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
     a greater score for each objective function. 
-    3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
-        and your confidence level in that assessment on a scale of 0-100%.
-    4. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+    3. Call get_malicious_account_prediction(text: str) to inspect the ML model's prediction.
+    4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+    and your confidence level in that assessment on a scale of 0-100%.
+    If your score is different than the model_score, you must explain why you disagree. 
+    5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
     {
@@ -91,5 +110,6 @@ malicious_acc_agent = LlmAgent(
         "confidence": 0-100
     }
     """,
-    output_key='malicious_account_analysis'
+    output_key='malicious_account_analysis',
+    tools=[get_malicious_account_prediction],
 )
