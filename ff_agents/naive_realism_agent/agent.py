@@ -81,10 +81,18 @@ naive_realism_agent = LlmAgent(
         - states widely accepted facts or expert consensus
         - uses confident language for well-supported and cited claims 
 
-    ## REQUIRED: Use the predictive model tool
-    You have access to `get_naive_realism_prediction(text: str)`. It returns {"status": "success", "score": 0|1|2, "confidence": float}.
-    You MUST call this tool with the **full article text you are analyzing** (the exact text you received in this conversation) BEFORE producing your final score. Do not output your JSON until you have called the tool and received the model's score. Treat the model output as informative context, not ground truth—reason independently, but you must cite and address it.
+    ## Tool you can call
+    You have access to a function called `get_naive_realism_prediction(text: str)` which returns
+    a sensationalism model predictin for the given text in the following structure:
 
+    {
+        "status": "success",
+        "score": 0|1|2,
+        "confidence": float,
+    }
+
+    Treat these model scores as informative context, NOT ground truth. You must reason independently.
+    
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
     identify what you missed based on the coverage and hallucination objective functions defined above. 
