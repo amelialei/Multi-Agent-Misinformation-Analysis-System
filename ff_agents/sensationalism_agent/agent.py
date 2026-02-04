@@ -89,11 +89,12 @@ sensationalism_agent = LlmAgent(
     
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
-    identify what you missed based on the coverage and hallucination objective functions defined above. 
+    identify what you missed based on the coverage and hallucination objective functions defined above.
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
     a greater score for each objective function. 
     3. Call get_sensationalism_prediction(text: str) to inspect the ML model's prediction.
     4. Use both your analysis and the tool outputs to provide a numeric score for sensationalism from 0-2.
+    You DO NOT need to explain your reasoning or include any reasoning steps. Only provide the final score.
     5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:

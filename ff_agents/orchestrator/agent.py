@@ -1,11 +1,11 @@
 from google.adk.agents import ParallelAgent
 from google.adk.agents import SequentialAgent
-from ff_agents.frequency_heuristic_agent.agent import freq_heuristic_agent
-from ff_agents.malicious_account_agent.agent import malicious_acc_agent
-from ff_agents.naive_realism_agent.agent import naive_realism_agent
-from ff_agents.sensationalism_agent.agent import sensationalism_agent
-from ff_agents.merger_agent.agent import merger_agent
-from ff_agents.claim_extraction_agent.agent import claim_extraction_agent
+from frequency_heuristic_agent.agent import freq_heuristic_agent
+from malicious_account_agent.agent import malicious_acc_agent
+from naive_realism_agent.agent import naive_realism_agent
+from sensationalism_agent.agent import sensationalism_agent
+from merger_agent.agent import merger_agent
+from claim_extraction_agent.agent import claim_extraction_agent
 
 parallel_analysis_agent = ParallelAgent(
     name='parallel_analysis_agent',

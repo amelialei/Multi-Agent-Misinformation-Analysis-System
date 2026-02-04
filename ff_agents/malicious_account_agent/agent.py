@@ -99,6 +99,7 @@ malicious_acc_agent = LlmAgent(
     a greater score for each objective function. 
     3. Call get_malicious_account_prediction(text: str) to inspect the ML model's prediction.
     4. Use both your analysis and the tool outputs to provide a numeric score for malicious account from 0-2.
+    You DO NOT need to explain your reasoning or include any reasoning steps. Only provide the final score.
     5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
