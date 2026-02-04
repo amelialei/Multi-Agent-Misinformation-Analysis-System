@@ -93,16 +93,12 @@ sensationalism_agent = LlmAgent(
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
     a greater score for each objective function. 
     3. Call get_sensationalism_prediction(text: str) to inspect the ML model's prediction.
-    4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
-    and your confidence level in that assessment on a scale of 0-100%.
-    If your score is different than the model score, you must explain why you disagree. 
+    4. Use both your analysis and the tool outputs to provide a numeric score for sensationalism from 0-2.
     5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
     {
         "score": 0|1|2,
-        "reasoning": "Explanation",
-        "confidence": 0-100
     }
     """,
     output_key='sensationalism_analysis',

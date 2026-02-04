@@ -23,7 +23,6 @@ merger_agent = LlmAgent(
     **Output Format**:
     {
         "truthfulness_label": "pants-fire" | "false" | "mostly-false" | "half-true" | "mostly-true" | "true",
-        "reasoning": "detailed explanation of how the final label was determined based on the analyses",
         "frequency_heuristic": {frequency_heuristic_analysis},
         "malicious_account": {malicious_account_analysis},
         "naive_realism": {naive_realism_analysis},
