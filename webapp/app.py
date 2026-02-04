@@ -270,32 +270,22 @@ def factuality_score(article_text):
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
     a greater score for each objective function. 
     3. Call get_model_scores(article_text) to inspect the ML model predictions.
-    4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
-        and your confidence level in that assessment on a scale of 0-100%.
-        If your score is different than the model_score, you must explain why you disagree. 
+    4. Use both your analysis and the tool outputs to provide a numeric score (0, 1, or 2) for each factuality factor.
     5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
     {{
         "frequency_heuristic": {{
             "score": 0|1|2,
-            "reasoning": "Explanation",
-            "confidence": 0-100
         }},
         "malicious_account": {{
             "score": 0|1|2,
-            "reasoning": "Explanation",
-            "confidence": 0-100
         }},
         "sensationalism": {{
             "score": 0|1|2,
-            "reasoning": "Explanation",
-            "confidence": 0-100
         }},
         "naive_realism": {{
             "score": 0|1|2,
-            "reasoning": "Explanation",
-            "confidence": 0-100
         }}
     }}
     """
@@ -317,38 +307,38 @@ def index():
 def save_to_csv(article_url, parsed):
     run_id = str(uuid.uuid4())
 
-    freq_conf = parsed["frequency_heuristic"]["confidence"]
-    mal_conf = parsed["malicious_account"]["confidence"]
-    sens_conf = parsed["sensationalism"]["confidence"]
-    naive_conf = parsed["naive_realism"]["confidence"]
+    # freq_conf = parsed["frequency_heuristic"]["confidence"]
+    # mal_conf = parsed["malicious_account"]["confidence"]
+    # sens_conf = parsed["sensationalism"]["confidence"]
+    # naive_conf = parsed["naive_realism"]["confidence"]
 
-    overall_conf = (freq_conf + mal_conf + sens_conf + naive_conf) / 4
+    # overall_conf = (freq_conf + mal_conf + sens_conf + naive_conf) / 4
 
     row = {
         "id": run_id,
         "url": article_url,
 
         "freq_score": parsed["frequency_heuristic"]["score"],
-        "freq_reason": parsed["frequency_heuristic"]["reasoning"],
-        "freq_confidence": freq_conf,
+        # "freq_reason": parsed["frequency_heuristic"]["reasoning"],
+        # "freq_confidence": freq_conf,
 
         "mal_score": parsed["malicious_account"]["score"],
-        "mal_reason": parsed["malicious_account"]["reasoning"],
-        "mal_confidence": mal_conf,
+        # "mal_reason": parsed["malicious_account"]["reasoning"],
+        # "mal_confidence": mal_conf,
 
         "sens_score": parsed["sensationalism"]["score"],
-        "sens_reason": parsed["sensationalism"]["reasoning"],
-        "sens_confidence": sens_conf,
+        # "sens_reason": parsed["sensationalism"]["reasoning"],
+        # "sens_confidence": sens_conf,
 
         "naive_score": parsed["naive_realism"]["score"],
-        "naive_reason": parsed["naive_realism"]["reasoning"],
-        "naive_confidence": naive_conf,
+        # "naive_reason": parsed["naive_realism"]["reasoning"],
+        # "naive_confidence": naive_conf,
 
-        "overall_confidence": overall_conf
+        # "overall_confidence": overall_conf
     }
 
     df_row = pd.DataFrame([row])
-    csv_path = "results/data_outputs.csv"
+    csv_path = "results/fcot_outputs_pt2.csv"
 
     if os.path.exists(csv_path):
         df_row.to_csv(csv_path, mode="a", header=False, index=False)
