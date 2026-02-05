@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 try:
     from tools.model_predictions import get_frequency_heuristic_prediction
@@ -114,3 +115,4 @@ freq_heuristic_agent = LlmAgent(
     output_key='frequency_heuristic_analysis',
     tools=[get_frequency_heuristic_prediction],
 )
+

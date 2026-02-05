@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 try:
     from tools.model_predictions import get_naive_realism_prediction
@@ -111,3 +112,4 @@ naive_realism_agent = LlmAgent(
     output_key='naive_realism_analysis',
     tools=[get_naive_realism_prediction],
 )
+

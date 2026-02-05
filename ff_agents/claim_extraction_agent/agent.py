@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 claim_extraction_agent = LlmAgent(
     model='gemini-2.5-flash',
@@ -41,3 +42,4 @@ claim_extraction_agent = LlmAgent(
     """,
     output_key="extracted_claims"
 )
+

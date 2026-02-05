@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 try:
     from tools.model_predictions import get_sensationalism_prediction
@@ -105,3 +106,4 @@ sensationalism_agent = LlmAgent(
     output_key='sensationalism_analysis',
     tools=[get_sensationalism_prediction],
 )
+
