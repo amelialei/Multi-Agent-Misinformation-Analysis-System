@@ -99,17 +99,19 @@ freq_heuristic_agent = LlmAgent(
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
     identify what you missed based on the coverage and hallucination objective functions defined above. 
-    You DO NOT need to include your reasoning steps in the output.
     2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
     a greater score for each objective function. 
     3. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
-    4. Use both your analysis and the tool outputs to provide a numeric score for frequency heuristic from 0-2.
-    You DO NOT need to explain your reasoning or include any reasoning steps. Only provide the final score.
+    4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+    and your confidence level in that assessment on a scale of 0-100%.
+    If your score is different than the model score, you must explain why you disagree. 
     5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
     ## Output Format:
     {
         "score": 0|1|2,
+        "reasoning": "Explanation",
+        "confidence": 0-100
     }
     """,
     output_key='frequency_heuristic_analysis',
