@@ -67,7 +67,7 @@ a malicious account ML model prediction for the given text in the following stru
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
 ## Evaluation Proccess: 
-1. Think step-by-step about the article's tone, evidence, framing, and intent to refine your analysis. 
+1. Think step-by-step about the article's references, interaction pattern, and content to refine your analysis. 
 2. Call get_malicious_account_prediction(text: str) to inspect the ML model's prediction.
 3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
 and your confidence level in that assessment on a scale of 0-100%.

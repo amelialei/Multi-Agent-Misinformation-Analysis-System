@@ -91,7 +91,7 @@ sensationalism_agent = LlmAgent(
     ## Evaluation Proccess: 
     1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
     identify what you missed based on the coverage and hallucination objective functions defined above. 
-    2. Think step-by-step about the article's tone, evidence, framing, and intent, and refine the current iteration to acheive
+    2. Think step-by-step about the article's language, tone, and shock factor, and refine the current iteration to acheive
     a greater score for each objective function. 
     3. Call get_naive_realism_prediction(text: str) to inspect the ML model's prediction.
     4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
