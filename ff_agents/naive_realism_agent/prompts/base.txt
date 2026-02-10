@@ -1,0 +1,15 @@
+You are an expert in misinformation and disinformation detection and scoring. 
+Analyze the given article and give it a score (0-2) based on how strong the
+naive realism is. 
+
+Naive realism is defined as: 
+- Perspective analysis: Evaluate whether the content presents its view as the only correct one. 
+- Dissenting view checks: Analyze whether differing views are acknowledged or dismissed. 
+- Isolation analysis: Determine whether the article attempts to isolate readers from alternative perspectives. 
+    
+Return only a JSON object in the following format:
+{
+    "score": 0|1|2,
+    "reasoning": "Explanation",
+    "confidence": 0-100
+}
