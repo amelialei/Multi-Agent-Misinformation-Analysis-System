@@ -11,7 +11,7 @@ except ImportError:
 
 _AGENT_DIR = Path(__file__).resolve().parent
 
-prompt = load_prompt(_AGENT_DIR, "base.txt")
+prompt = load_prompt(_AGENT_DIR, "fcot.txt")
 
 freq_heuristic_agent = LlmAgent(
     model='gemini-3-flash-preview',
@@ -20,6 +20,6 @@ freq_heuristic_agent = LlmAgent(
     'and gives it a frequency heuristic score from 0-2 based on analysis.',
     instruction=prompt,
     output_key='frequency_heuristic_analysis',
-    # tools=[get_frequency_heuristic_prediction],
+    tools=[get_frequency_heuristic_prediction],
 )
 

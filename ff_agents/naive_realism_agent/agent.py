@@ -11,7 +11,7 @@ except ImportError:
 
 _AGENT_DIR = Path(__file__).resolve().parent
 
-prompt = load_prompt(_AGENT_DIR, "base.txt")
+prompt = load_prompt(_AGENT_DIR, "fcot.txt")
 
 naive_realism_agent = LlmAgent(
     model='gemini-3-flash-preview',
@@ -20,6 +20,6 @@ naive_realism_agent = LlmAgent(
     'from 0-2 based on the analysis.',
     instruction=prompt,
     output_key='naive_realism_analysis',
-    # tools=[get_naive_realism_prediction],
+    tools=[get_naive_realism_prediction],
 )
 
