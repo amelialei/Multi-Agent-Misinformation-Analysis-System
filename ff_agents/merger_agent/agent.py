@@ -1,7 +1,7 @@
 from google.adk.agents import LlmAgent
 
 merger_agent = LlmAgent(
-    model='gemini-2.5-flash-lite',
+    model='gemini-3-flash-lite',
     name='merger_agent',
     description='Combines anaylis findings from parallel agents to produce a final report with a truthfulness label for the article.',
     instruction="""

@@ -7,7 +7,7 @@ except ImportError:
     from ff_agents.tools.model_predictions import get_malicious_account_prediction
 
 malicious_acc_agent = LlmAgent(
-    model='gemini-2.5-flash',
+    model='gemini-3-flash',
     name='malicious_acc_agent',
     description='Analyzes an article for malicious content and gives it a malicious account score ' \
     'from 0-2 based on the analysis.',

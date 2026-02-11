@@ -4,7 +4,7 @@ from google.adk.tools import google_search
 # Claim Extraction Agent
 claim_extraction_agent = Agent(
     name="claim_extraction_agent",
-    model="gemini-2.0-flash",
+    model="gemini-3-flash",
     description="Extracts verifiable factual claims from the article for downstream retrieval and analysis.",
     instruction="""
     You are an expert at identifying factual claims suitable for external verification.

@@ -7,7 +7,7 @@ except ImportError:
     from ff_agents.tools.model_predictions import get_frequency_heuristic_prediction
 
 freq_heuristic_agent = LlmAgent(
-    model='gemini-2.5-flash',
+    model='gemini-3-flash',
     name='freq_heuristic_agent',
     description='Analyzes an article for repetition, a traceable origin, and evidence verification, '
     'and gives it a frequency heuristic score from 0-2 based on analysis.',

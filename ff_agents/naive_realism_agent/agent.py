@@ -7,7 +7,7 @@ except ImportError:
     from ff_agents.tools.model_predictions import get_naive_realism_prediction
 
 naive_realism_agent = LlmAgent(
-    model='gemini-2.5-flash',
+    model='gemini-3-flash',
     name='naive_realism_agent',
     description='Analyzes an article for naive realism and gives it a naive realism score ' \
     'from 0-2 based on the analysis.',
