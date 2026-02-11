@@ -20,6 +20,6 @@ malicious_acc_agent = LlmAgent(
     'from 0-2 based on the analysis.',
     instruction=prompt,
     output_key='malicious_account_analysis',
-    tools=[get_malicious_account_prediction],
+    # tools=[get_malicious_account_prediction],
 )
 

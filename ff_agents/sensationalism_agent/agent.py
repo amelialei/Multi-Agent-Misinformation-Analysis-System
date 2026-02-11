@@ -20,6 +20,6 @@ sensationalism_agent = LlmAgent(
     'from 0-2 based on the analysis.',
     instruction=prompt,
     output_key='sensationalism_analysis',
-    tools=[get_sensationalism_prediction],
+    # tools=[get_sensationalism_prediction],
 )
 

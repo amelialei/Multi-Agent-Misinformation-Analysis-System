@@ -20,6 +20,6 @@ naive_realism_agent = LlmAgent(
     'from 0-2 based on the analysis.',
     instruction=prompt,
     output_key='naive_realism_analysis',
-    tools=[get_naive_realism_prediction],
+    # tools=[get_naive_realism_prediction],
 )
 

@@ -20,6 +20,6 @@ freq_heuristic_agent = LlmAgent(
     'and gives it a frequency heuristic score from 0-2 based on analysis.',
     instruction=prompt,
     output_key='frequency_heuristic_analysis',
-    tools=[get_frequency_heuristic_prediction],
+    # tools=[get_frequency_heuristic_prediction],
 )
 
