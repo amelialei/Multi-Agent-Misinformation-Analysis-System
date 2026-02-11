@@ -66,7 +66,7 @@ Treat these model scores as informative context, NOT ground truth. You must reas
 
 ## Evaluation Proccess: 
 1. Think step-by-step about the article's language, tone, and shock factor to refine your analysis. 
-2. Call get_naive_realism_prediction(text: str) to inspect the ML model's prediction.
+2. Call get_sensationalism_prediction(text: str) to inspect the ML model's prediction.
 3. Use both your analysis and the tool outputs to provide a numeric score, a justification,
 and your confidence level in that assessment on a scale of 0-100%.
 If your score is different than the model score, you must explain why you disagree. 
