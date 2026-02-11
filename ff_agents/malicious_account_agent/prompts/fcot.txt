@@ -81,7 +81,7 @@ Treat these model scores as informative context, NOT ground truth. You must reas
 
 ## Evaluation Proccess: 
 1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
-identify what you missed based on the coverage and hallucination objective functions defined above. 
+identify what you missed based on the objective functions defined above. 
 2. Think step-by-step about the article's references, interaction pattern, and content, and refine the current iteration to acheive
 a greater score for each objective function. 
 3. Call get_malicious_account_prediction(text: str) to inspect the ML model's prediction.
