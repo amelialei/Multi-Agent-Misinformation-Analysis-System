@@ -59,8 +59,9 @@ Your reasoning and scoring must optimize **both** of the following objectives:
 - Identify and evaluate all instances of dramatic, exaggerated, or emotionally charged language, including
 exagerrated wording, clickbait, fear-mongering, heavy emotional framing with little evidence or missing details
 
-### **Objective 2: MINIMIZE labeling serious events as sensationalisn**
-- Do not classify an article as sensational simply because it covers inherently serious, alarming, or important topics.
+### **Objective 2: MINIMIZE Hallucination**
+- Use only the information provided in the article. If you're uncertain or the information is missing, 
+respond with "insufficient information".
 
 ## Tool you can call
 You have access to a function called `get_sensationalism_prediction(text: str)` which returns

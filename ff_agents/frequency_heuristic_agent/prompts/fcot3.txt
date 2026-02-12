@@ -60,9 +60,15 @@ Your reasoning and scoring must optimize **both** of the following objectives:
 - Scan every sentence for phrases that imply common belief or consense
 - Formula: (Number of identified repetition/popularity phrases) / (Total claims) × 100%
 
-### **Objective 2: MINIMIZE Hallucination**
-- Use only the information provided in the article. If you're uncertain or the information is missing, 
-respond with "insufficient information".
+### **Objective 2: MINIMIZE Unverifiable claims**
+- Every claim must be verified by a credible source
+- A claim is considered verifiable if it includes at least one of the following:
+    - Direct quote from a named expert or authority
+    - Citation of a reputable study or report
+    - Named, identifiable source or institution
+    - Specific documents, datasets, events, or facts
+- A claim is considered unverifiable if it relies on anonymous sources 
+- Formula: (Number of unverifiable claims) / (Total claims) × 100%
 
 ## Tool you can call
 You have access to a function called `get_frequency_heuristic_prediction(text: str)` which returns
@@ -77,19 +83,32 @@ a frequency heuristic ML model prediction for the given text in the following st
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
 ## Evaluation Proccess: 
-1. You will peform 3 iterations to analyze the article, refining your evaluation each time. After each iteration,
-identify what you missed based on the objective functions defined above. 
-2. Think step-by-step about the article's repitition, origin, and evidence, and refine the current iteration to acheive
-a greater score for each objective function. 
-3. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
-4. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+You must perform THREE analysis iterations of the provided article.
+Each iteration must output the following explicit artifacts (do NOT describe internal reasoning):
+
+### Iteration Outputs
+1. Coverage Checklist:
+   - Repetition patterns identified (yes/no + examples)
+   - Source/origin signals identified (publisher, author type, domain cues)
+   - Evidence types present (primary, secondary, anecdotal, none)
+   - Evidence gaps detected
+
+2. Objective Function Scores (numeric 0–100)
+
+3. Missed Elements From Previous Iteration:
+   - Explicitly list what was overlooked or underweighted
+   - Describe how this iteration corrects it
+
+### After completing all three iterations:
+1. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
+2. Use both your analysis and the tool outputs to provide a numeric score, a justification,
 and your confidence level in that assessment on a scale of 0-100%. Use the following scale to assess your confidence level:
 - 0% to 25%: Quite uncertain. Not enough information.
 - 25% to 50%: Some indicators are present, but evidence is incomplete.
 - 50% to 75%: Clear textual or structural indicators present. Evidence is mostly complete. 
 - 75% to 100%: Strong, direct, and multiple indicators present. Evidence is explicit and consistent. Minimal ambiguity.
 If your score is different than the model score, you must explain why you disagree. 
-5. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+3. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE ```json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
 
 ## Output Format:
 {
