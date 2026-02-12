@@ -94,6 +94,6 @@ If your score is different than the model score, you must explain why you disagr
 ## Output Format:
 {
     "score": 0|1|2,
-    "reasoning": "Explanation",
+    "reasoning": "Brief explanation",
     "confidence": 0-100
 }
