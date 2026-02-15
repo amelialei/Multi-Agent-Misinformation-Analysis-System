@@ -227,7 +227,7 @@ Naive Realism Score: 0.566
 ```
 
 ## Agent-Based Verification
-The agent system is currently in testing mode using the ADK web interface:
+The agent system is currently in testing mode using the ADK web interface.
 
 ### Testing Workflow
 1. Run the ADK web interface
@@ -336,6 +336,48 @@ Outputs:
 - `predicted_naive_realism`
 - `naive_realism_score` - probability of label confidence
 
+## Agent System Details
+
+### Claim Extraction Agent
+Powered by gemini-3-flash, this agent coordinates claim extraction and verification.
+
+#### Extraction Capabilities
+- Extracts 3-7 atomic, factual claims per article
+- Filters out opinions, rhetoric, and speculation
+- Produces self-contained, testable statements
+- Uses a single instruction
+
+### Verification via Tool
+- Uses the Claim Verification Agent as a tool to validate extracted claims
+- The Claim Verification Agent leverages Google Search to find authoritative sources
+- Evaluates evidence from multiple perspectives
+- Assigns verification status and confidence levels
+- Returns detailed verification reports with source URLs
+
+#### Verification Statuses
+SUPPORTED: Multiple credible sources confirm
+REFUTED: Credible sources contradict
+PARTIALLY_SUPPORTED: Mixed evidence
+UNVERIFIABLE: Insufficient information
+CONFLICTING: Sources disagree
+
+**Architecture Note**: This approach replaces traditional RAG with direct Google Search integration for more current fact-checking.
+
+### Factuality Factor Agents
+Each of the four factuality factors has been reimplemented as an agent with experimental prompt variants.
+
+**Frequency Heuristic Agent**
+Analyzes repetition patterns, buzzwords, and TF-IDF signals that may indicate manipulation or "truthiness."
+
+**Sensationalism Agent**
+Detects emotional language, exaggeration, ALLCAPS usage, and dramatic rhetoric.
+
+**Malicious Account Agent**
+Identifies linguistic markers associated with bot-like behavior, spam patterns, and inauthentic messaging.
+
+**Naive Realism Agent**
+Measures absolutist phrasing, lack of hedging, and dismissive language that presents opinion as fact.
+
 ## Note on Exploratory Models and Methodology Evolution
 
 During the early stages of this project, our team explored a broader set of factuality factors through exploratory data analysis and experimental modeling found within the `eda_visualization.ipynb` notebook. This notebook includes preliminary implementations of **Credibility** and **Echo Chamber** models, along with earlier versions of the **Frequency Heuristic** and **Sensationalism** models.
@@ -343,3 +385,6 @@ During the early stages of this project, our team explored a broader set of fact
 As our methodology matured, we refined our framework to focus on four primary factuality dimensions for the final production pipeline which included **Frequency Heuristic**, **Sensationalism**, and the newly added **Naive Realism**, and **Malicious Account**.
 
 While **Credibility** and **Echo Chamber** are not included in the finalized model pipeline, exploratory versions of these models remain available in the `notebooks/` directory. Users who wish to extend the project, compare modeling strategies, or incorporate additional factuality factors are welcome to experiment with these earlier models.
+
+## License
+This project is part of the DSC180A Capstone course at UC San Diego.
