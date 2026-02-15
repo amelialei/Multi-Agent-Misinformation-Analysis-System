@@ -1,7 +1,7 @@
 # DSC180A Capstone Project - Multi-Agent Misinformation Analysis System
 
 ## Overview
-This project aims to mitigate the gap of truth identification in an era where bias and sensationalism are prevalent in the political landscape through the use of mutliple factuality factors.
+This project addresses the challenges of identifying misinformation in news content by combining traditional ML models with a multi-agent LLM architecture. Instead of relying on one source of truth, our system evaluates multiple factuality dimensions including frequency heuristic, sensationalism, malicious account, and naive realism.
 We use the LIAR-PLUS dataset to train separate models for:
 
 - Frequency Heuristics - detecting repetition, buzzwords, and linguistic patterns that artificially enhance “truthiness.”
