@@ -226,6 +226,27 @@ Naive Realism Level: 1
 Naive Realism Score: 0.566
 ```
 
+## Agent-Based Verification
+The agent system is currently in testing mode using the ADK web interface:
+
+### Testing Workflow
+1. Run the ADK web interface
+
+```bash
+adk web ff_agents
+```
+2. Select the orchestrator agent from the top left drop down menu
+3. Paste an article into the chat to analyze
+
+### Changing Prompt Variants
+To experiment with different prompts for the factuality agents, edit the `agent.py` file and modify the prompt loading line:
+```bash
+prompt = load_prompt(_AGENT_DIR, "file_name.txt")
+```
+Available prompt files: `base.txt`, `cot.txt`, `fcot.txt`, `fcot2.txt`, `fcot3.txt`, `function_calling.txt`, `icl.txt`
+
+Note: Full agent integration with the Flask web interface is in development. Each factuality agent supports multiple prompt variants for experimentation.
+
 ## Running the Web Application
 The Flask UI lets you do the following:
 - Paste an article link
