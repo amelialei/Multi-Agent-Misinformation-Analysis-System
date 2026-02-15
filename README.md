@@ -356,9 +356,13 @@ Powered by gemini-3-flash, this agent coordinates claim extraction and verificat
 
 #### Verification Statuses
 SUPPORTED: Multiple credible sources confirm
+
 REFUTED: Credible sources contradict
+
 PARTIALLY_SUPPORTED: Mixed evidence
+
 UNVERIFIABLE: Insufficient information
+
 CONFLICTING: Sources disagree
 
 **Architecture Note**: This approach replaces traditional RAG with direct Google Search integration for more current fact-checking.
@@ -367,15 +371,19 @@ CONFLICTING: Sources disagree
 Each of the four factuality factors has been reimplemented as an agent with experimental prompt variants.
 
 **Frequency Heuristic Agent**
+
 Analyzes repetition patterns, buzzwords, and TF-IDF signals that may indicate manipulation or "truthiness."
 
 **Sensationalism Agent**
+
 Detects emotional language, exaggeration, ALLCAPS usage, and dramatic rhetoric.
 
 **Malicious Account Agent**
+
 Identifies linguistic markers associated with bot-like behavior, spam patterns, and inauthentic messaging.
 
 **Naive Realism Agent**
+
 Measures absolutist phrasing, lack of hedging, and dismissive language that presents opinion as fact.
 
 ## Note on Exploratory Models and Methodology Evolution
