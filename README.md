@@ -49,7 +49,14 @@ DSC180A-Q1Project/
 │   ├── val_set.csv                   # Validation set with new scraped data
 │   ├── val2.tsv                      # Original LiarPLUS validation set
 │   ├── test_set.csv                  # Test set with new scraped data
-│   └── test2.tsv                     # Original LiarPLUS test set
+│   ├── test2.tsv                     # Original LiarPLUS test set
+│   ├── base_results.csv              # Base prompt experiment results
+│   ├── cot_results.csv               # Chain-of-thought prompt results
+│   ├── fcot1_results.csv             # Fractal CoT (v1) results
+│   ├── fcot2_results.csv             # Fractal CoT (v2) results
+│   ├── fcot_gemini3_results.csv      # Fractal CoT results using Gemini 3
+│   ├── function_calling_results.csv  # Tool-based prompt results
+│   └── icl_results.csv               # In-context learning prompt results
 │
 ├── notebooks/
 │   ├── agent_experiments.ipynb       # Accuracy evaluation of agent prompt variants
