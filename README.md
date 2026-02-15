@@ -14,6 +14,28 @@ We used the LIAR-PLUS dataset to train separate models for:
 
 Each model captures a unique dimension of factuality, contributing to a broader framework for automated fact-checking.
 
+## Recent Updates - Agent Integration (Q2)
+We've integrated a multi-agent verification system that enhances our fact-checking pipeline with AI-powered agents:
+
+### Agent Architecture
+The system consists of five specialized agents.
+1. Claim Extraction Agent: Extracts verifiiable factual claims from articles
+- Uses Claim Verification Agent as a tool with Google Search integraton
+- No traditional RAG - relies on Google Search for external knowledge retrieval
+2. Frequency Heuristic Agent: Analyzes repetition patterns and buzzword usage
+3. Sensationalism Agent: Detects emotional and exaggerated rhetoric
+4. Malicious Account Agent: Identifies linguistic markers of inauthentic behavior
+5. Naive Realism Agent: Measures absolutist language and opinion-as-fact representation
+
+### Prompt Experimentation
+Each factuality factor agent (2-5) includes seven prompt variants for systematic testing:
+- Base, Chain-of-Thought, Fractal COT (3 variants), Function Calling, In-Context Learning
+
+### Current Status:
+Testing Phase: All articles are being tested with calls to orchestrator before integration with the web interface. Additionally, we are currently working on hill climbing for Fractal COT.
+Next Steps: Connect the agent piepeline to the Flask UI for end-to-end verification workflow.
+
+
 ## Repository Structure
 ```text
 DSC180A-Q1Project/
