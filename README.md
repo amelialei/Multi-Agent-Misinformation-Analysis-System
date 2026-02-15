@@ -52,11 +52,38 @@ DSC180A-Q1Project/
 │   └── test2.tsv                     # Original LiarPLUS test set
 │
 ├── notebooks/
+│   ├── agent_experiments.ipynb       # Accuracy evaluation of agent prompt variants
 │   ├── eda_visualization.ipynb       # Exploratory visualizations for LIAR-PLUS dataset
 │   ├── metrics.ipynb                 # Accuracy scores for predictive models and LLM models
 │   ├── model_accuracy.ipynb          # Various performance metrics for baseline predictive models
+│   ├── prompt_results.ipynb          # Prompting experiment visualizations
 │   ├── prompting.ipynb               # Contains 20 incremental prompts refining the model 
 │   └── scraped_data.ipynb            # Additonal scraped data from Politifact added to LiarPLUS
+│
+├── ff_agents/                        # Multi-agent factuality analysis system
+│   ├── claim_extraction_agent/       # Claim extraction (single instruction, no prompts)
+│   │   ├── __init__.py
+│   │   └── agent.py
+│   ├── frequency_heuristic_agent/
+│   │   ├── __init__.py
+│   │   ├── agent.py
+│   │   └── prompts/                  # Prompt variants used for experiments
+│   │       ├── base.txt
+│   │       ├── cot.txt
+│   │       ├── fcot.txt
+│   │       ├── fcot2.txt
+│   │       ├── fcot3.txt
+│   │       ├── function_calling.txt
+│   │       └── icl.txt
+│   ├── sensationalism_agent/         # Same structure as frequency_heuristic_agent
+│   ├── malicious_account_agent/      # Same structure as frequency_heuristic_agent
+│   ├── naive_realism_agent/          # Same structure as frequency_heuristic_agent
+│   ├── orchestrator/                 # Controls agent execution flow
+│   │   ├── __init__.py
+│   │   └── agent.py
+│   └── merger_agent/                 # Aggregates agent outputs
+│       ├── __init__.py
+│       └── agent.py
 │
 ├── src/                              # Core project source code
 │   ├── __init__.py
