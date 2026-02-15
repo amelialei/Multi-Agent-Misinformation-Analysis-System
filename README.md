@@ -33,6 +33,7 @@ Each factuality factor agent (2-5) includes seven prompt variants for systematic
 
 ### Current Status
 Testing Phase: All articles are being tested with calls to orchestrator before integration with the web interface. Additionally, we are currently working on hill climbing for Fractal COT.
+
 Next Steps: Connect the agent piepeline to the Flask UI for end-to-end verification workflow.
 
 
