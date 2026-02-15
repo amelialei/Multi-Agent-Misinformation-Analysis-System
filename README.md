@@ -28,7 +28,7 @@ The system consists of five specialized agents.
 5. Naive Realism Agent: Measures absolutist language and opinion-as-fact representation
 
 ### Prompt Experimentation
-Each factuality factor agent (2-5) includes seven prompt variants for systematic testing:
+Each factuality factor agent includes seven prompt variants for systematic testing:
 - Base, Chain-of-Thought, Fractal COT (3 variants), Function Calling, In-Context Learning
 
 ### Current Status
