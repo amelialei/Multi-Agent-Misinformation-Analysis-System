@@ -2,7 +2,10 @@
 
 ## Overview
 This project addresses the challenges of identifying misinformation in news content by combining traditional ML models with a multi-agent LLM architecture. Instead of relying on one source of truth, our system evaluates multiple factuality dimensions including frequency heuristic, sensationalism, malicious account, and naive realism.
-We use the LIAR-PLUS dataset to train separate models for:
+
+The project has evolved from a standalone ML pipeline with into an agent-based system designed to support claim analysis, verification, and explainability. The current phase focuses on agent integration, with plans to connect the system to the interactive interface next.
+
+We used the LIAR-PLUS dataset to train separate models for:
 
 - Frequency Heuristics - detecting repetition, buzzwords, and linguistic patterns that artificially enhance “truthiness.”
 - Sensationalism - identifying emotionally charged, exaggerated, or dramatic rhetoric.
