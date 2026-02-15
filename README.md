@@ -32,7 +32,7 @@ Each factuality factor agent (2-5) includes seven prompt variants for systematic
 - Base, Chain-of-Thought, Fractal COT (3 variants), Function Calling, In-Context Learning
 
 ### Current Status
-Testing Phase: All articles are being tested with calls to orchestrator before integration with the web interface. Additionally, we are currently working on hill climbing for Fractal COT.
+Testing Phase: All articles are being tested by selecting the orchestrator via the ADK web interface. Single agents can also be used from the dropdown menu and tested by pasting articles into the chat. Additionally, we are currently working on hill climbing for Fractal COT.
 
 Next Steps: Connect the agent piepeline to the Flask UI for end-to-end verification workflow.
 
