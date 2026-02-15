@@ -113,23 +113,24 @@ scikit-learn==1.5.2
 xgboost==2.1.1
 textblob==0.18.0
 scipy==1.14.1
-wordcloud==1.9.2
+wordcloud==1.9.3
 feedparser==6.0.10
 sentence-transformers==2.7.0
 transformers==4.44.2
-newspaper3k==0.2.8
 chromadb==0.4.24
 beautifulsoup4==4.12.2
 requests==2.31.0
 spacy==3.7.2
-en-core-web-sm==3.7.1
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 matplotlib==3.7.2
 seaborn==0.12.2
 lxml_html_clean==0.1.0
 google-genai
 python-dotenv
-flask
-torch
+flask==3.0.3
+torch==2.3.1
+google-adk
+google-adk[a2a]
 ```
 
 If you encounter an OpenMP error on macOS when running XGBoost, ensure homebrew is installed and install the OpenMP runtime:
