@@ -27,6 +27,10 @@ The system consists of five specialized agents.
 4. Malicious Account Agent: Identifies linguistic markers of inauthentic behavior
 5. Naive Realism Agent: Measures absolutist language and opinion-as-fact representation
 
+To help coordinate these agents and synthesize results, the system also utilizes an orchestrator and merger agent.
+- Orchestrator: A SequentialAgent that calls upon the specialized sub-agents to perform the analysis and score the given article
+- Merger Agent: Combines the analysis results from the 4 factuality factor agents and gives the article a final truthfulness label
+
 ### Prompt Experimentation
 Each factuality factor agent includes seven prompt variants for systematic testing:
 - Base, Chain-of-Thought, Fractal COT (3 variants), Function Calling, In-Context Learning
