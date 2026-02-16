@@ -99,8 +99,8 @@ DSC180A-Q1Project/
 ├── src/                              # Core project source code
 │   ├── __init__.py
 │   ├── articles.py                   # Article ingestion, preprocessing
-│   ├── predictive_models.py          # ML/LLM-based prediction pipeline
-│   ├── script.py                     # Main script to run full pipeline
+│   ├── predictive_models.py          # ML prediction pipeline
+│   ├── script.py                     # Main script to run full ML model pipeline
 │   └── config.json                   # Config settings for models and pipeline
 │
 ├── webapp/                           # Flask-based UI for demo interactions
