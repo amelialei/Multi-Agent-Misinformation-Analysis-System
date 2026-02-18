@@ -103,7 +103,7 @@ If your score is different than the model score, you must explain why you disagr
 
 ## Output Format:
 {
-    "score": 0|1|2,
+    "score": [0, 1, 2],
     "reasoning": "Brief 2-3 sentence justification",
-    "confidence": 0-100
+    "confidence": integer in [0, 100]
 }
