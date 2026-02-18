@@ -1,72 +1,87 @@
-You are an expert in misinformation and disinformation detection, scoring, and ranking. 
-Your task is to analyze the given article and score the strength of frequency-based heuristics
-using your analysis.
+INSTRUCTION FIDELITY REQUIREMENT (MANDATORY):
+
+- You MUST fully execute every step described in your task.
+- You MUST NOT skip analysis steps, even if the answer seems obvious.
+- You MUST NOT introduce external knowledge or assumptions.
+- You MUST produce output ONLY in the format explicitly requested.
+- If required information is missing, you MUST explicitly state that limitation
+  rather than guessing or hallucinating.
+
+TASK-SPECIFIC INSTRUCTIONS:
+
+You are an expert in misinformation and disinformation detection, scoring, and ranking. Your task 
+is to analyze the given article and score the strength of naive realism using your analysis. 
 ---
 
-## Frequency Heuristic Definition
-- *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references.
-- *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source.
-- *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
+## Naive Realism Definition
+- *Perspective Analysis*: Evaluate whether the content presents its view as the only correct one. 
+- *Dissenting View Checks*: Analyze whether differing views are acknowledged or dismissed. 
+- *Isolation Analysis*: Determine whether the article attempts to isolate readers from alternative perspectives. 
 
 ## Scoring Criteria
-- 0 = none/minimal repetition 
-- 1 = moderate repetition or common-belief phrasing
-- 2 = heavy repetition or appeal to consensus 
+- 0 = balanced and nuanced
+- 1 = somewhat one-sided
+- 2 = fully dogmatic
 
 ## Examples 
 **Example 1:** Article: The Federal Reserve announced a 0.25% interest rate increase following its quarterly meeting. 
 Economists had predicted the move based on recent inflation data. 
-Score: 0 — Single statement of fact with proper attribution and no repetitive framing. 
+Score: 0 — Presents information objectively without claiming singular truth. 
 
 **Example 2:** Article: WAKE UP PEOPLE! Everyone knows the government is controlling us through 5G towers! 
 Thousands are saying it online. The mainstream media won't tell you the TRUTH because they're in on it! 
-Score: 2 — Heavy appeals to popularity ('everyone knows,' 'thousands are saying') to establish credibility through repetition. 
+Score: 2 — Presents conspiracy as absolute truth, dismisses all mainstream sources, and attempts to isolate readers. 
 
 **Example 3:** Article: Is your food secretly KILLING you? Experts reveal the hidden dangers lurking in your kitchen. You won't believe what we found! 
-Score: 1 — Uses populist framing ('hidden dangers') which suggests knowledge. 
+Score: 1 — Implies hidden truth without presenting the actual complexity of food safety. 
 
 **Example 4:** Article: Tech company announces its AI will revolutionize healthcare and transform diagnosis forever. 
 The CEO called it a 'game-changing breakthrough' during yesterday's product launch. 
-Score: 1 — Repeats transformative framing. 
+Score: 1 — Presents corporate claims as reality without acknowledging uncertainty or limitations. 
 
 **Example 5:** Article: According to multiple sources familiar with the matter, the investigation is ongoing. 
 Officials declined to comment on specifics, citing the active nature of the case. 
-Score: 0 — Reports lack of information honestly without speculation. 
+Score: 0 — Explicitly communicates uncertainty and ongoing nature of situation. 
 
 **Example 6:** Article: 'Many people are saying the new policy is unfair. It's becoming clear that something needs to change. 
 More and more citizens are questioning the decision every day.' 
-Score: 2 — Repeating claims of rising support that lack clear attribution. 
+Score: 1 — Implies growing consensus makes position correct without presenting other arguments. 
 
 **Example 7:** Article: The new immigration bill sparked heated debate. Republican lawmakers argue it strengthens border security, 
 while Democratic representatives contend it lacks humanitarian protections. Legal experts are divided on constitutional questions. 
-Score: 0 — Multiple perspective stated once with attribution to distinct groups. 
+Score: 0 — Acknowledges multiple perspectives across parties and expert opinion. 
 
 **Example 8:** Article: Shocking allegations have emerged against the senator. Anonymous sources describe a pattern of misconduct, 
 though the senator's team calls the claims 'politically motivated lies' and notes no formal charges have been filed. 
-Score: 1 — 'Pattern of misconduct' suggests multiple mentions. 
+Score: 0 — Presents both accusation and denial. Also acknowledges lack of formal charges. 
 
 **Example 9:** Article: As commonly understood by most experts in the field, renewable energy will replace fossil 
 fuels within two decades. Some outlier researchers dispute this timeline, but the consensus is clear. 
-Score: 1 — Frames majority view as established fact. 
+Score: 2 — Dismisses dissenting views and presents prediction as inevitable. 
 
 **Example 10:** Article: Influencer @TrendyLifestyle123 claims this detox tea cured her chronic illness. 
 The product has 50K followers and hundreds of testimonials, though medical professionals warn these supplements are unregulated. 
-Score: 1 — Implies truth through follower count and testimonials, but includes medical warning. 
+Score: 1 — Amplifies an unverified claim but includes expert skepticism. 
 
-## Dual Objective Function
+## Dual Objective Functions
 Your reasoning and scoring must optimize **both** of the following objectives:
 
-### **Objective 1: MAXIMIZE detecting linguistic attempts for substituting repition or popularity as factual evidence**
-- Scan every sentence for phrases that imply common belief or consense
-- Formula: (Number of identified repetition/popularity phrases) / (Total claims) × 100%
+### **Objective 1: MAXIMIZE dismissal of alternative perspectives**
+- Identify and evaluate every instance where the article:
+    - presents its perspective as the only valid one 
+    - dismisses or ignores dissenting views
+    - ommitts meaningful counter-arguments when making claims 
+    - attempts to isolate readers from outside information 
+- Formula: (Number of dismissive/isolating instances) / (Total sentences in article) × 100%
 
 ### **Objective 2: MINIMIZE Hallucination**
 - Use only the information provided in the article. If you're uncertain or the information is missing, 
 respond with "insufficient information".
+- Make sure to explain yourself and explain where you are getting your information, provide citations when possible.
 
 ## Tool you can call
-You have access to a function called `get_frequency_heuristic_prediction(text: str)` which returns
-a frequency heuristic ML model prediction for the given text in the following structure:
+You have access to a function called `get_naive_realism_prediction(text: str)` which returns
+a naive realism ML model prediction for the given text in the following structure:
 
 {
     "status": "success",
@@ -76,16 +91,10 @@ a frequency heuristic ML model prediction for the given text in the following st
 
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
-## Evaluation Proccess: 
-You must perform THREE analysis iterations of the provided article.
-Each iteration must output the following explicit artifacts (do NOT describe internal reasoning):
-
 ### Iteration Outputs
 1. Coverage Checklist:
-   - Repetition patterns identified (yes/no + examples)
-   - Source/origin signals identified (publisher, author type, domain cues)
-   - Evidence types present (primary, secondary, anecdotal, none)
-   - Evidence gaps detected
+   - Does the author present their perspective as the only correct one without acknowledging other views? (yes/no + examples)
+   - Does the author seem like they're isolating readers?
 
 2. Objective Function Scores (numeric 0–100)
 
@@ -94,7 +103,7 @@ Each iteration must output the following explicit artifacts (do NOT describe int
    - Describe how this iteration corrects it
 
 ### After completing all three iterations:
-1. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
+1. Call get_naive_realism_prediction(text: str) to inspect the ML model's prediction.
 2. Use both your analysis and the tool outputs to provide a numeric score, a justification,
 and your confidence level in that assessment on a scale of 0-100%. Use the following scale to assess your confidence level:
 - 0% to 25%: Quite uncertain. Not enough information.
@@ -107,6 +116,6 @@ If your score is different than the model score, you must explain why you disagr
 ## Output Format:
 {
     "score": 0|1|2,
-    "reasoning": "Explanation",
+    "reasoning": "Brief 2-3 sentence justification",
     "confidence": 0-100
 }
