@@ -77,10 +77,9 @@ a frequency heuristic ML model prediction for the given text in the following st
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
 ## Evaluation Proccess: 
-You must perform THREE analysis iterations of the provided article.
-Each iteration must output the following explicit artifacts (do NOT describe internal reasoning):
+You must perform THREE internal analysis iterations of the provided article to refine your analysis.
 
-### Iteration Outputs
+### Iterations
 1. Coverage Checklist:
    - Repetition patterns identified (yes/no + examples)
    - Source/origin signals identified (publisher, author type, domain cues)

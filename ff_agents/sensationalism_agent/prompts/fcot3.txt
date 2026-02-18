@@ -75,7 +75,10 @@ a sensationalism ML model prediction for the given text in the following structu
 
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
-### Iteration Outputs
+## Evaluation Proccess: 
+You must perform THREE internal analysis iterations of the provided article to refine your analysis.
+
+### Iterations
 1. Coverage Checklist:
    - Is language used overly exaggerated? (yes/no + examples)
    - Is there a stark difference between the tone of the headline and the main content?

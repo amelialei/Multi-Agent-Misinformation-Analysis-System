@@ -79,7 +79,10 @@ a naive realism ML model prediction for the given text in the following structur
 
 Treat these model scores as informative context, NOT ground truth. You must reason independently.
 
-### Iteration Outputs
+## Evaluation Proccess: 
+You must perform THREE internal analysis iterations of the provided article to refine your analysis.
+
+### Iterations
 1. Coverage Checklist:
    - Does the author present their perspective as the only correct one without acknowledging other views? (yes/no + examples)
    - Does the author seem like they're isolating readers?
