@@ -11,7 +11,7 @@ except ImportError:
 
 _AGENT_DIR = Path(__file__).resolve().parent
 
-prompt = load_prompt(_AGENT_DIR, "fcot2.txt")
+prompt = load_prompt(_AGENT_DIR, "fcot3.txt")
 
 malicious_acc_agent = LlmAgent(
     model='gemini-3-flash-preview',
