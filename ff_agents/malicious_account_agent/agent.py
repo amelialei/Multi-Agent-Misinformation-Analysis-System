@@ -1,6 +1,6 @@
 from pathlib import Path
-
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 try:
     from tools.model_predictions import get_malicious_account_prediction
@@ -23,3 +23,5 @@ malicious_acc_agent = LlmAgent(
     tools=[get_malicious_account_prediction],
 )
 
+root_agent = malicious_acc_agent
+a2a_app = to_a2a(root_agent, port=8002)

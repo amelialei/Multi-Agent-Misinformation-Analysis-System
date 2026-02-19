@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.agents import LlmAgent
 
 try:
@@ -23,3 +23,5 @@ sensationalism_agent = LlmAgent(
     tools=[get_sensationalism_prediction],
 )
 
+root_agent = sensationalism_agent
+a2a_app = to_a2a(root_agent, port=8004)

@@ -1,4 +1,5 @@
 from google.adk.agents import LlmAgent
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 merger_agent = LlmAgent(
     model='gemini-3-flash-preview',
@@ -33,3 +34,6 @@ merger_agent = LlmAgent(
     phrases outside this structure. Do not inlclude any analysis or reasoning steps in your output.
     """,
 )
+
+root_agent = merger_agent
+a2a_app = to_a2a(root_agent, port=8006)

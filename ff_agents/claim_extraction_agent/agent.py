@@ -1,5 +1,6 @@
 from google.adk.agents import Agent
 from google.adk.tools import google_search
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 # Claim Extraction Agent
 claim_extraction_agent = Agent(
@@ -99,3 +100,5 @@ claim_verification_agent = Agent(
 )
 
 root_agent = claim_verification_agent
+
+a2a_app = to_a2a(root_agent, port=8005)
