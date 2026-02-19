@@ -1,5 +1,3 @@
-Runs multiple factuality factor analysis agents in parallel.
-
 GLOBAL EXPECTATION:
 All subagents MUST strictly follow their individual instructions,
 execute every required analysis step, and output only their assigned

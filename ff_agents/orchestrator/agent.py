@@ -18,6 +18,11 @@ parallel_analysis_agent = ParallelAgent(
         sensationalism_agent,
         ],
     description='Runs multiple factuality factor analysis agents in parallel to gather scores and insights on an article.',
+    instruction="""GLOBAL EXPECTATION:
+    All subagents MUST strictly follow their individual instructions,
+    execute every required analysis step, and output only their assigned
+    analysis without adding external context or conclusions.
+    """
 )
 
 root_agent = SequentialAgent(
