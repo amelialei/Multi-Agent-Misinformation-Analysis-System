@@ -2,51 +2,22 @@ from google.adk.agents import ParallelAgent
 from google.adk.agents import SequentialAgent
 from google.adk.agents.remote_a2a_agent import AGENT_CARD_WELL_KNOWN_PATH
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
-# from frequency_heuristic_agent.agent import freq_heuristic_agent
-# from malicious_account_agent.agent import malicious_acc_agent
-# from naive_realism_agent.agent import naive_realism_agent
-# from sensationalism_agent.agent import sensationalism_agent
-# from merger_agent.agent import merger_agent
+from frequency_heuristic_agent.agent import freq_heuristic_agent
+from malicious_account_agent.agent import malicious_acc_agent
+from naive_realism_agent.agent import naive_realism_agent
+from sensationalism_agent.agent import sensationalism_agent
+from merger_agent.agent import merger_agent
 from claim_extraction_agent.agent import claim_extraction_agent
 
-# parallel_analysis_agent = ParallelAgent(
-#     name='parallel_analysis_agent',
-#     sub_agents=[
-#         freq_heuristic_agent, 
-#         malicious_acc_agent, 
-#         naive_realism_agent, 
-#         sensationalism_agent,
-#         ],
-#     description='Runs multiple factuality factor analysis agents in parallel to gather scores and insights on an article.',
-# )
-
-freq_heuristic_agent = RemoteA2aAgent(
-    name="freq_heuristic_agent",
-    agent_card=f"http://localhost:8001/{AGENT_CARD_WELL_KNOWN_PATH}",
-    output_key='frequency_heuristic_analysis'
-)
-
-malicious_acc_agent = RemoteA2aAgent(
-    name="malicious_acc_agent",
-    agent_card=f"http://localhost:8002/{AGENT_CARD_WELL_KNOWN_PATH}",
-    output_key='malicious_account_analysis'
-)
-
-naive_realism_agent = RemoteA2aAgent(
-    name="naive_realism_agent",
-    agent_card=f"http://localhost:8003/{AGENT_CARD_WELL_KNOWN_PATH}",
-    output_key='naive_realism_analysis'
-)
-
-sensationalism_agent = RemoteA2aAgent(
-    name="sensationalism_agent",
-    agent_card=f"http://localhost:8004/{AGENT_CARD_WELL_KNOWN_PATH}",
-    output_key='sensationalism_analysis'
-)
-
-merger_agent = RemoteA2aAgent(
-    name="merger_agent",
-    agent_card=f"http://localhost:8006/{AGENT_CARD_WELL_KNOWN_PATH}",
+parallel_analysis_agent = ParallelAgent(
+    name='parallel_analysis_agent',
+    sub_agents=[
+        freq_heuristic_agent, 
+        malicious_acc_agent, 
+        naive_realism_agent, 
+        sensationalism_agent,
+        ],
+    description='Runs multiple factuality factor analysis agents in parallel to gather scores and insights on an article.',
 )
 
 parallel_analysis_agent = ParallelAgent(
