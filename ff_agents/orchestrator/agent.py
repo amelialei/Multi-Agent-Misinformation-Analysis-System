@@ -20,17 +20,6 @@ parallel_analysis_agent = ParallelAgent(
     description='Runs multiple factuality factor analysis agents in parallel to gather scores and insights on an article.',
 )
 
-parallel_analysis_agent = ParallelAgent(
-    name='parallel_analysis_agent',
-    sub_agents=[
-        freq_heuristic_agent, 
-        malicious_acc_agent, 
-        naive_realism_agent, 
-        sensationalism_agent,
-        ],
-    description='Runs multiple factuality factor analysis agents in parallel to gather scores and insights on an article.',
-)
-
 root_agent = SequentialAgent(
     name='root_agent',
     sub_agents=[parallel_analysis_agent, merger_agent],
