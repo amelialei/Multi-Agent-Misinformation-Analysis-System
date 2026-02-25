@@ -73,9 +73,12 @@ Score: 1 — Implies truth through follower count and testimonials, but includes
 ## Dual Objective Function
 Your reasoning and scoring must optimize **both** of the following objectives:
 
-### **Objective 1: MAXIMIZE detecting linguistic attempts for substituting repition or popularity as factual evidence**
-- Scan every sentence for phrases that imply common belief or consense
-- Formula: (Number of identified repetition/popularity phrases) / (Total claims) × 100%
+### **Objective 1: MAXIMIZE Detection of "Bandwagon" Framing and Unsubstantiated Consensus**
+- If the article accurately quotes a politician making a "bandwagon" argument, do not flag it. Your job is to evaluate if the 
+journalist themselves writes that a claim is true simply because many people are saying it. Accurately quoting a biased person 
+is just normal reporting.
+- Scan the author's text for linguistic markers like "many are saying," "experts agree," or "a growing consensus" when they are used *in place of* specific citations.
+- Assess whether a core claim is simply restated multiple times across the text without introducing new supporting evidence, creating an illusion of truth through sheer volume.
 
 ### **Objective 2: MINIMIZE Hallucination**
 - Use only the information provided in the article. If you're uncertain or the information is missing, 
