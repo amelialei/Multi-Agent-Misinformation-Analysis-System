@@ -11,13 +11,13 @@ their creation dates or activity patterns suggest inauthentic behavior.
 - Is this a bot or a real account account? Was it created for passing on misinformation, to disseminate disinformation?
 
 ## Scoring Rubric
-Score 0 — No Account-Level Risk Indicators
+Score 0 — No Risk Indicators
 - Source is named, traceable, or institutionally identifiable.
 - No signs of impersonation or fabrication.
 - Anonymous sourcing is standard journalistic practice (e.g., “officials declined to comment”).
 - No evidence of coordinated amplification or bot-like signals.
 
-Score 1 — Limited or Ambiguous Risk Indicators
+Score 1 — Some Potential Risk Indicators
 - Anonymous or vague source making strong claims.
 - Influencer-style accounts making unverified assertions.
 - Promotional or highly biased accounts.
