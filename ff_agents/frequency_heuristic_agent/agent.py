@@ -11,7 +11,7 @@ except ImportError:
 
 _AGENT_DIR = Path(__file__).resolve().parent
 
-prompt = load_prompt(_AGENT_DIR, "instruction_fidelity.txt")
+prompt = load_prompt(_AGENT_DIR, "fcot4.txt")
 
 freq_heuristic_agent = LlmAgent(
     model='gemini-3-flash-preview',
