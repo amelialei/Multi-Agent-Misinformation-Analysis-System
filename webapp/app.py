@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 import os
-from google import genai
 from google.genai import types
 import json
 import pandas as pd
@@ -11,6 +10,15 @@ import sys
 # Add project root to Python path
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
+
+# ADK imports
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.genai import types as genai_types
+
+# Importing orchestrator root agent
+sys.path.append(os.path.join(ROOT, "ff_agents"))
+from orchestrator.agent import root_agent
 
 # Importing models
 from src.predictive_models import (
@@ -22,13 +30,12 @@ from src.predictive_models import (
 )
 
 load_dotenv()
-
 app = Flask(__name__)
 
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Initializing Models - Runs at Start of Flask
+# ML Model Initialization
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 TRAIN_PATH = os.path.join(DATA_DIR, "train_set.csv")
 VAL_PATH   = os.path.join(DATA_DIR, "val_set.csv")
@@ -37,19 +44,12 @@ TEST_PATH  = os.path.join(DATA_DIR, "test_set.csv")
 print("Loading LIAR-PLUS datasets...")
 train_df, val_df, test_df = load_datasets(TRAIN_PATH, VAL_PATH, TEST_PATH)
 
-print("Building Frequency model...")
+print("Building models...")
 freq_model, freq_tfidf, freq_count_vec, freq_token_dict, freq_buzzwords, freq_le = \
     build_frequency_model(train_df)
-
-print("Building Sensationalism model...")
 sens_pipeline, sens_numeric_features = build_sensationalism_model(train_df)
-
-print("Building Malicious Account model...")
 mal_model, mal_tfidf, mal_le = build_malicious_account_model(train_df)
-
-print("Building Naive Realism model...")
 naive_pipeline, naive_numeric_features = build_naive_realism_model(train_df)
-
 print("All models initialized.")
 
 # Getting Model Scores
