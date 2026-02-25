@@ -37,3 +37,4 @@ merger_agent = LlmAgent(
 
 root_agent = merger_agent
 a2a_app = to_a2a(root_agent, port=8006)
+
