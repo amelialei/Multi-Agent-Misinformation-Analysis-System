@@ -12,7 +12,6 @@ using your analysis.
 Score 0 - No Use of Repetition or Popularity as Evidence
 - Claims are stated once or repeated only for clarity.
 - Repetition does not increase perceived truth value.
-- Popularity metrics (followers, testimonials, trending) are contextualized.
 - Attribution is specific and traceable.
 - Evidence is primary, named, or verifiable.
 
