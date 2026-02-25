@@ -23,6 +23,13 @@ Score 1 — Limited or Ambiguous Risk Indicators
 - Promotional or highly biased accounts.
 - Questionable attribution patterns.
 
+Score 2 — Strong Deceptive Indicators
+- Explicit impersonation or fabricated identity.
+- Coordinated network behavior described in the article.
+- Repeated spreading of false claims stated within the article.
+- Bot-like amplification patterns.
+- Clear intent to mislead, scam, or manipulate.
+
 ## Examples 
 **Example 1:** Article: The Federal Reserve announced a 0.25% interest rate increase following its quarterly meeting. 
 Economists had predicted the move based on recent inflation data. 
