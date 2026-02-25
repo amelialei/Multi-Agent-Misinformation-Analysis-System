@@ -22,7 +22,7 @@ parallel_analysis_agent = ParallelAgent(
 
 root_agent = SequentialAgent(
     name='root_agent',
-    sub_agents=[parallel_analysis_agent, merger_agent, claim_extraction_agent],
+    sub_agents=[parallel_analysis_agent, merger_agent],
     description='Coordinates parallel factuality analysis and synthesis.',
 )
 
