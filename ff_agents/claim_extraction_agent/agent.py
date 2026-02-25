@@ -5,7 +5,7 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 # Claim Extraction Agent
 claim_extraction_agent = Agent(
     name="claim_extraction_agent",
-    model="gemini-3-flash",
+    model="gemini-3-flash-preview",
     description="Extracts verifiable factual claims from the article for downstream retrieval and analysis.",
     instruction="""
     You are an expert at identifying factual claims suitable for external verification.
@@ -48,7 +48,7 @@ claim_extraction_agent = Agent(
 # Claim Verification Agent with Google Search
 claim_verification_agent = Agent(
     name="claim_verification_agent",
-    model="gemini-2.0-flash",
+    model="gemini-3-flash-preview",
     description="Verifies extracted claims using Google Search to determine their factual accuracy.",
     instruction="""
     You are a fact-checking expert that verifies claims using Google Search results.
