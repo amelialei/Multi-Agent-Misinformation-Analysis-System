@@ -43,7 +43,7 @@ Next Steps: Connect the agent piepeline to the Flask UI for end-to-end verificat
 
 ## Repository Structure
 ```text
-DSC180A-Q1Project/
+DSC180A-Q2Project/
 ├── data/
 │   ├── article.txt                   # Article text for ingestion
 │   ├── ground_truth.csv              # Hand-labeled articles with appropriate factuality factor scores
