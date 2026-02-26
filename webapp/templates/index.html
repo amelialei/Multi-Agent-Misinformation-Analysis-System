@@ -288,7 +288,7 @@
             </table>
             
             <h3 style="margin-top: 30px; text-align:center;">
-                Normalized Factor Score Profiles
+                Normalized Agent Score Profiles
             </h3>
             
             <div class="radar-container">
@@ -407,21 +407,70 @@ document.getElementById("clearBtn").addEventListener("click", () => {
         datasets: [
             {
                 label: 'Base Prompt',
-                data: [0.60, 0.80, 0.45, 0.60],
+                data: [0.30, 0.10, 0.43, 0.38],
                 borderWidth: 2,
                 pointRadius: 4,         // normal point size
                 pointHoverRadius: 8     // size on hover
             },
             {
-                label: 'ICL + CoT',
-                data: [0.70, 0.50, 0.35, 0.45],
+                label: 'Chain-of-Thought',
+                data: [0.40, 0.05, 0.58, 0.38],
                 borderWidth: 2,
                 pointRadius: 4,
                 pointHoverRadius: 8
             },
             {
-                label: 'Fractal CoT',
+                label: 'ICL',
                 data: [0.55, 0.55, 0.60, 0.70],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'Function Calling',
+                data: [0.68, 0.55, 0.58, 0.45],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'FC + Fractal CoT',
+                data: [0.20, 0.78, 0.45, 0.40],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'FC + FCoT - Gemini 3',
+                data: [0.55, 0.23, 0.53, 0.48],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'FC + FCoT - Gemini 3 - 2',
+                data: [0.43, 0.83, 0.53, 0.48],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'FC + FCoT - Gemini 3 - 3',
+                data: [0.53, 0.95, 0.58, 0.48],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'Instruction Fidelity',
+                data: [0.40, 0.93, 0.55, 0.35],
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'FC + FCoT - Gemini 3 - 4',
+                data: [0.65, 0.95, 0.68, 0.40],
                 borderWidth: 2,
                 pointRadius: 4,
                 pointHoverRadius: 8
