@@ -21,34 +21,8 @@ from google.genai import types as genai_types
 sys.path.append(os.path.join(ROOT, "ff_agents"))
 from orchestrator.agent import root_agent
 
-# Importing models
-from src.predictive_models import (
-    load_datasets,
-    build_frequency_model, predict_frequency_model,
-    build_sensationalism_model, predict_sensationalism_model,
-    build_malicious_account_model, predict_malicious_account_model,
-    build_naive_realism_model, predict_naive_realism_model,
-)
-
 load_dotenv()
 app = Flask(__name__)
-
-# ML Model Initialization
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-TRAIN_PATH = os.path.join(DATA_DIR, "train_set.csv")
-VAL_PATH   = os.path.join(DATA_DIR, "val_set.csv")
-TEST_PATH  = os.path.join(DATA_DIR, "test_set.csv")
-
-print("Loading LIAR-PLUS datasets...")
-train_df, val_df, test_df = load_datasets(TRAIN_PATH, VAL_PATH, TEST_PATH)
-
-print("Building models...")
-freq_model, freq_tfidf, freq_count_vec, freq_token_dict, freq_buzzwords, freq_le = \
-    build_frequency_model(train_df)
-sens_pipeline, sens_numeric_features = build_sensationalism_model(train_df)
-mal_model, mal_tfidf, mal_le = build_malicious_account_model(train_df)
-naive_pipeline, naive_numeric_features = build_naive_realism_model(train_df)
-print("All models initialized.")
 
 # ADK Runner Setup
 APP_NAME = "factuality_app"
