@@ -182,6 +182,10 @@
         align-items: center;
         }
 
+        .radar-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 
@@ -288,12 +292,18 @@
             </table>
             
             <h3 style="margin-top: 30px; text-align:center;">
-                Normalized Agent Score Profiles
+                Baseline Agent Score Profiles
             </h3>
-            
             <div class="radar-container">
-                <canvas id="promptRadarChart"></canvas>
-            </div>         
+                <canvas id="promptRadarChart1"></canvas>
+            </div>
+            
+            <h3 style="margin-top: 20px; text-align:center;">
+                Fractal CoT Agent Score Profiles
+            </h3>
+            <div class="radar-container">
+                <canvas id="promptRadarChart2"></canvas>
+            </div>        
         </div>
 
         <div class="right-panel">
@@ -405,128 +415,117 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 </script>
 
 <script>
-    const ctx = document.getElementById('promptRadarChart');
-    
-    new Chart(ctx, {
-    type: 'radar',
-    data: {
-        labels: [
-            'Frequency Heuristic',
-            'Malicious Account',
-            'Sensationalism',
-            'Naive Realism'
-        ],
-        datasets: [
-            {
-                label: 'Base Prompt',
-                data: [0.30, 0.10, 0.43, 0.38],
-                borderWidth: 2,
-                pointRadius: 4,         // normal point size
-                pointHoverRadius: 8     // size on hover
-            },
-            {
-                label: 'Chain-of-Thought',
-                data: [0.40, 0.05, 0.58, 0.38],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'ICL',
-                data: [0.55, 0.55, 0.60, 0.70],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'Function Calling',
-                data: [0.68, 0.55, 0.58, 0.45],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'FC + Fractal CoT',
-                data: [0.20, 0.78, 0.45, 0.40],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'FC + FCoT - Gemini 3',
-                data: [0.55, 0.23, 0.53, 0.48],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'FC + FCoT - Gemini 3 - 2',
-                data: [0.43, 0.83, 0.53, 0.48],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'FC + FCoT - Gemini 3 - 3',
-                data: [0.53, 0.95, 0.58, 0.48],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'Instruction Fidelity',
-                data: [0.40, 0.93, 0.55, 0.35],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            },
-            {
-                label: 'FC + FCoT - Gemini 3 - 4',
-                data: [0.65, 0.95, 0.68, 0.40],
-                borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 8
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            r: {
-                min: 0,
-                max: 1,
-                ticks: {
-                    stepSize: 0.2,
-                    color: '#ccc'
+    // Chart 1 - Non-FCoT methods
+    const ctx1 = document.getElementById('promptRadarChart1');
+    new Chart(ctx1, {
+        type: 'radar',
+        data: {
+            labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
+            datasets: [
+                {
+                    label: 'Base Prompt',
+                    data: [0.30, 0.10, 0.43, 0.38],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
                 },
-                grid: {
-                    color: '#444'
+                {
+                    label: 'Chain-of-Thought',
+                    data: [0.40, 0.05, 0.58, 0.38],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
                 },
-                pointLabels: {
-                    color: '#eee',
-                    font: {
-                        size: 13
-                    }
+                {
+                    label: 'ICL',
+                    data: [0.55, 0.55, 0.60, 0.70],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'Function Calling',
+                    data: [0.68, 0.55, 0.58, 0.45],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'Instruction Fidelity',
+                    data: [0.40, 0.93, 0.55, 0.35],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
                 }
-            }
+            ]
         },
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#eee'
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    min: 0, max: 1,
+                    ticks: { stepSize: 0.2, color: '#ccc' },
+                    grid: { color: '#444' },
+                    pointLabels: { color: '#eee', font: { size: 13 } }
                 }
             },
-            tooltip: {
-                enabled: true,
-                callbacks: {
-                    label: function(context) {
-                        return `${context.dataset.label}: ${context.formattedValue}`;
+            plugins: {
+                legend: { labels: { color: '#eee' } },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`
                     }
                 }
             }
         }
-    }
-});
-    </script>    
+    });
+
+    // Chart 2 - FCoT only
+    const ctx2 = document.getElementById('promptRadarChart2');
+    new Chart(ctx2, {
+        type: 'radar',
+        data: {
+            labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
+            datasets: [
+                {
+                    label: 'FC + Fractal CoT',
+                    data: [0.20, 0.78, 0.45, 0.40],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'FC + FCoT - Gemini 3',
+                    data: [0.55, 0.23, 0.53, 0.48],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'FC + FCoT - Gemini 3 - 2',
+                    data: [0.43, 0.83, 0.53, 0.48],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'FC + FCoT - Gemini 3 - 3',
+                    data: [0.53, 0.95, 0.58, 0.48],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                },
+                {
+                    label: 'FC + FCoT - Gemini 3 - 4',
+                    data: [0.65, 0.95, 0.68, 0.40],
+                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    min: 0, max: 1,
+                    ticks: { stepSize: 0.2, color: '#ccc' },
+                    grid: { color: '#444' },
+                    pointLabels: { color: '#eee', font: { size: 13 } }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#eee' } },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`
+                    }
+                }
+            }
+        }
+    });
+</script>    
 </body>
 </html>
