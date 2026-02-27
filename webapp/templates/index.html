@@ -333,18 +333,30 @@ document.getElementById("articleForm").addEventListener("submit", async (e) => {
             resultDiv.innerHTML = "Error: " + data.error;
         } else {
             // Compute overall score
-            const scores = [
-                data.frequency_heuristic.score,
-                data.malicious_account.score,
-                data.sensationalism.score,
-                data.naive_realism.score
-            ];
-            const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
-            const ratingMap = ["Misleading","Slightly Misleading","Neutral","Slightly Accurate","Incredibly Accurate"];
-            const overallRating = ratingMap[avg*2] || "Neutral"; // map 0-2 to 5-scale
+            const labelMap = {
+                "pants-fire": "Pants on Fire",
+                "false": "False",
+                "mostly-false": "Mostly False",
+                "half-true": "Half True",
+                "mostly-true": "Mostly True",
+                "true": "True"
+            };
+            
+            const overallRating = labelMap[data.truthfulness_label] || data.truthfulness_label || "Unknown";
+
+            const labelColors = {
+                "pants-fire": "#ff4444",
+                "false": "#ff6b6b",
+                "mostly-false": "#ffaa44",
+                "half-true": "#ffdd44",
+                "mostly-true": "#88cc44",
+                "true": "#44cc88"
+            };
+            
+            const labelColor = labelColors[data.truthfulness_label] || "#e5e5e5";
 
             let html = `
-                <div class="overall-score">This article is: ${overallRating}</div>
+                <div class="overall-score">This article is: <span style="color: ${labelColor}">${overallRating}</span></div>
                 <div class="synopsis"><b>Synopsis:</b> ${data.synopsis || "Summary not available"}</div>
                 <table>
                     <thead>

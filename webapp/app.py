@@ -86,7 +86,6 @@ def run_agent_pipeline(article_text: str) -> dict:
 def index():
     return render_template("index.html")
 
-
 def save_to_csv(article_url, parsed):
     run_id = str(uuid.uuid4())
     row = {
