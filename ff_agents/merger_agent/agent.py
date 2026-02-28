@@ -35,26 +35,10 @@ merger_agent = LlmAgent(
     {
         "truthfulness_label": "pants-fire|false|mostly-false|half-true|mostly-true|true",
         "synopsis": "3-4 sentence summary of the article's overall factuality, key concerns found, and what drove the final label.",
-        "frequency_heuristic": {
-            "score": 0|1|2,
-            "reasoning": "brief explanation grounded in article text",
-            "confidence": 0-100
-        },
-        "malicious_account": {
-            "score": 0|1|2,
-            "reasoning": "brief explanation grounded in article text",
-            "confidence": 0-100
-        },
-        "sensationalism": {
-            "score": 0|1|2,
-            "reasoning": "brief explanation grounded in article text",
-            "confidence": 0-100
-        },
-        "naive_realism": {
-            "score": 0|1|2,
-            "reasoning": "brief explanation grounded in article text",
-            "confidence": 0-100
-        }
+        "frequency_heuristic": {frequency_heuristic_analysis},
+        "malicious_account": {malicious_account_analysis},
+        "sensationalism": {sensationalism_analysis},
+        "naive_realism": {naive_realism_analysis}
     }
     """,
 )
