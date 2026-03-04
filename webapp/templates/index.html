@@ -550,12 +550,12 @@
             <textarea id="mPrompt" placeholder="Paste the full prompt here..."></textarea>
         </div>
         <div class="form-group">
-            <label>Scores (0–1)</label>
+            <label>Scores (0–2)</label>
             <div class="score-inputs">
-                <input type="number" id="mFH" placeholder="Freq. Heur." step="0.01" min="0" max="1">
-                <input type="number" id="mMA" placeholder="Mal. Acct." step="0.01" min="0" max="1">
-                <input type="number" id="mSens" placeholder="Sensational." step="0.01" min="0" max="1">
-                <input type="number" id="mNR" placeholder="Naive Real." step="0.01" min="0" max="1">
+                <input type="number" id="mFH" placeholder="Freq. Heur." step="0.01" min="0" max="2">
+                <input type="number" id="mMA" placeholder="Mal. Acct." step="0.01" min="0" max="2">
+                <input type="number" id="mSens" placeholder="Sensational." step="0.01" min="0" max="2">
+                <input type="number" id="mNR" placeholder="Naive Real." step="0.01" min="0" max="2">
             </div>
         </div>
         <div class="form-group">
@@ -585,7 +585,7 @@ let prompts = [
         id: 1,
         name: "Base Prompt",
         type: "base",
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         prompt: `You are a misinformation detection agent. Analyze the following article and evaluate it on four dimensions:
 
 1. Frequency Heuristic: Does the article repeat claims to make them seem more credible?
@@ -603,7 +603,7 @@ Article: {article}`,
         id: 2,
         name: "Chain-of-Thought",
         type: "cot",
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         prompt: `You are a misinformation detection agent. Analyze the following article step by step.
 
 For each of the four factuality dimensions below, think through your reasoning carefully before assigning a score:
@@ -630,7 +630,7 @@ Article: {article}`,
         id: 3,
         name: "In-Context Learning (ICL)",
         type: "icl",
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         prompt: `You are a misinformation detection agent. Below are two example analyses, followed by the article you must evaluate.
 
 --- EXAMPLE 1 (High misinformation) ---
@@ -658,7 +658,7 @@ Article: {article}`,
         id: 4,
         name: "Function Calling",
         type: "fc",
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         prompt: `You are a misinformation detection agent with access to structured output tools.
 
 When analyzing an article, you MUST call the score_article function with the following fields:
@@ -679,6 +679,32 @@ Article: {article}`,
     },
     {
         id: 5,
+        name: "Instruction Fidelity",
+        type: "if",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Instruction Fidelity Protocol]
+You are a precision misinformation analysis agent. Your PRIMARY obligation is strict instruction adherence.
+
+MANDATORY SEQUENCE — do not skip or reorder steps:
+  [1] Read the article in full without forming judgments.
+  [2] Extract all factual claims as a numbered list.
+  [3] For each claim, note: source, verifiability, repetition count.
+  [4] Apply the four-dimension framework using ONLY evidence from step 3.
+  [5] Score each dimension 0–1 with explicit claim references.
+  [6] Perform self-check: "Does my score align with the evidence I extracted?"
+  [7] Call score_article() with final scores and reasoning.
+
+FAILURE CONDITIONS (if any occur, restart from step 1):
+  - Assigning a score without citing a specific claim
+  - Skipping the self-check step
+  - Using language like "seems" or "appears" without evidence
+
+Article: {article}`,
+        scores: { fh: 0.40, ma: 0.93, sens: 0.55, nr: 0.30 },
+        notes: "Focused on forcing procedural compliance. Malicious Account stayed high (0.93) likely because the claim-extraction step surfaces disinfo signals naturally. Naive Realism dropped — the rigid procedure may suppress the model's ability to assess epistemic framing holistically."
+    },
+    {
+        id: 6,
         name: "Fractal CoT 1 (gemini-2.5-flash-lite)",
         type: "fcot",
         model: "gemini-2.5-flash-lite",
@@ -714,7 +740,7 @@ Article: {article}`,
         notes: "First FCoT experiment, run on the lighter gemini-2.5-flash-lite model. Malicious Account jumped dramatically (0.78) — the sub-question decomposition appears to force the model to seek out concrete signals. Frequency Heuristic dropped, possibly due to model capacity."
     },
     {
-        id: 6,
+        id: 7,
         name: "Fractal CoT 1 (gemini-3)",
         type: "fcot",
         model: "gemini-3-flash-preview",
@@ -750,7 +776,7 @@ Article: {article}`,
         notes: "Same prompt as FCoT 1 but on gemini-3-flash-preview. Malicious Account fell sharply vs flash-lite — suggests the stronger model may over-reason and second-guess itself on ambiguous signals."
     },
     {
-        id: 7,
+        id: 8,
         name: "Fractal CoT 2",
         type: "fcot",
         model: "gemini-3-flash-preview",
@@ -775,7 +801,7 @@ Article: {article}`,
         notes: "Combined FCoT decomposition with ICL anchoring examples. Malicious Account recovered strongly (0.83). The calibration examples appear to help the model recognize disinfo patterns even within the fractal reasoning structure."
     },
     {
-        id: 8,
+        id: 9,
         name: "Fractal CoT 3",
         type: "fcot",
         model: "gemini-3-flash-preview",
@@ -803,32 +829,6 @@ OUTPUT via score_article() with all fields including per-dimension confidence.
 Article: {article}`,
         scores: { fh: 0.53, ma: 0.95, sens: 0.58, nr: 0.48 },
         notes: "Added confidence weighting and text-segment identification step. Malicious Account hit 0.95 — best result yet. The grounding step (identify segments first) appears critical for this dimension."
-    },
-    {
-        id: 9,
-        name: "Instruction Fidelity",
-        type: "if",
-        model: "gemini-3-flash-preview",
-        prompt: `[SYSTEM: Instruction Fidelity Protocol]
-You are a precision misinformation analysis agent. Your PRIMARY obligation is strict instruction adherence.
-
-MANDATORY SEQUENCE — do not skip or reorder steps:
-  [1] Read the article in full without forming judgments.
-  [2] Extract all factual claims as a numbered list.
-  [3] For each claim, note: source, verifiability, repetition count.
-  [4] Apply the four-dimension framework using ONLY evidence from step 3.
-  [5] Score each dimension 0–1 with explicit claim references.
-  [6] Perform self-check: "Does my score align with the evidence I extracted?"
-  [7] Call score_article() with final scores and reasoning.
-
-FAILURE CONDITIONS (if any occur, restart from step 1):
-  - Assigning a score without citing a specific claim
-  - Skipping the self-check step
-  - Using language like "seems" or "appears" without evidence
-
-Article: {article}`,
-        scores: { fh: 0.40, ma: 0.93, sens: 0.55, nr: 0.30 },
-        notes: "Focused on forcing procedural compliance. Malicious Account stayed high (0.93) likely because the claim-extraction step surfaces disinfo signals naturally. Naive Realism dropped — the rigid procedure may suppress the model's ability to assess epistemic framing holistically."
     },
     {
         id: 10,
