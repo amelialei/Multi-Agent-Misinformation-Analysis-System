@@ -2,194 +2,448 @@
 <html>
 <head>
     <title>Multi-Agent Misinformation Analysis System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
+            font-family: 'DM Sans', sans-serif;
+            background-color: #0f0f0f;
             margin: 0;
-            padding: 40px;
+            padding: 0;
             color: #e5e5e5;
         }
 
+        /* ── TOP NAV ── */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #161616;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 0 40px;
+        }
+
+        .nav-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: #4f8cff;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 18px 0;
+            margin-right: 40px;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #888;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 18px 20px 16px;
+            transition: color 0.2s, border-color 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        .tab-btn:hover { color: #ccc; }
+
+        .tab-btn.active {
+            color: #fff;
+            border-bottom: 2px solid #4f8cff;
+        }
+
+        /* ── PAGES ── */
+        .page { display: none; padding: 40px; }
+        .page.active { display: block; }
+
+        /* ── ANALYSIS PAGE ── */
         h1 {
             text-align: center;
             margin-bottom: 30px;
-            font-size: 36px;
+            font-size: 32px;
             color: #ffffff;
+            font-weight: 600;
         }
 
         .container {
             display: flex;
             gap: 30px;
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
         .left-panel, .right-panel {
             flex: 1;
-            background: #1e1e1e;
+            background: #1a1a1a;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            border: 1px solid #252525;
         }
 
         input[type="text"], textarea {
             width: 100%;
-            max-width: 100%;
             padding: 12px;
             border-radius: 8px;
-            border: 1px solid #444;
-            background: #2a2a2a;
+            border: 1px solid #333;
+            background: #222;
             color: #e5e5e5;
-            font-size: 16px;
-            margin-bottom: 16px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            margin-bottom: 14px;
+            transition: border-color 0.2s;
         }
 
-        textarea {
-            height: 250px;
-            resize: vertical;
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #4f8cff;
         }
+
+        textarea { height: 220px; resize: vertical; }
 
         .button-row {
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 16px;
+            padding: 11px 28px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: 500;
         }
 
-        #analyzeBtn {
-            background-color: #4f8cff;
-            color: white;
-        }
-
-        #analyzeBtn:hover:not(:disabled) {
-            background-color: #3a6fd9;
-        }
-
-        #analyzeBtn:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        #clearBtn {
-            background-color: #444;
-            color: white;
-        }
-
-        #clearBtn:hover {
-            background-color: #666;
-        }
+        #analyzeBtn { background-color: #4f8cff; color: white; }
+        #analyzeBtn:hover:not(:disabled) { background-color: #3a6fd9; }
+        #analyzeBtn:disabled { opacity: 0.6; cursor: wait; }
+        #clearBtn { background-color: #2e2e2e; color: #ccc; }
+        #clearBtn:hover { background-color: #3a3a3a; }
 
         .spinner {
             display: none;
             margin: 20px auto;
-            border: 4px solid #333;
-            border-top: 4px solid #4f8cff;
+            border: 3px solid #2a2a2a;
+            border-top: 3px solid #4f8cff;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 1s linear infinite;
+            width: 30px; height: 30px;
+            animation: spin 0.8s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 25px;
-            background: #2a2a2a;
+            margin-top: 20px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
-            border: 1px solid #444;
-            padding: 12px;
+            border: 1px solid #2e2e2e;
+            padding: 11px 14px;
             text-align: center;
             color: #e5e5e5;
+            font-size: 14px;
         }
 
-        th {
-            background-color: #333;
+        th { background-color: #252525; font-weight: 600; }
+        td.reasoning { text-align: left; line-height: 1.45; }
+
+        .overall-score { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+        .synopsis { font-size: 15px; margin-bottom: 20px; line-height: 1.6; color: #ccc; }
+
+        .prompting-table { width: 100%; margin-top: 14px; border-collapse: collapse; background: #1e1e1e; font-size: 13px; border-radius: 8px; overflow: hidden; }
+        .prompting-table th, .prompting-table td { border: 1px solid #2e2e2e; padding: 10px 12px; text-align: center; }
+        .prompting-table th { background-color: #252525; font-weight: 600; }
+        .prompting-table tr:hover { background-color: #272727; }
+
+        .form-content { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .radar-container { max-width: 400px; margin: 0 auto; }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #555;
+            margin: 28px 0 10px;
         }
 
-        td.reasoning {
-            text-align: left;
-            font-size: 15px;
-            line-height: 1.3;
+        /* ── PROMPTS PAGE ── */
+        .prompts-page { max-width: 1200px; margin: 0 auto; }
+
+        .prompts-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
         }
 
-        .overall-score {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 16px;
+        .prompts-header h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin: 0;
         }
 
-        .synopsis {
-            font-size: 16px;
-            margin-bottom: 20px;
+        .prompts-header p {
+            font-size: 14px;
+            color: #666;
+            margin: 4px 0 0;
         }
 
-        .baseline-image {
-            width: 100%;
-            margin-top: 20px;
+        .add-prompt-btn {
+            background: #4f8cff;
+            color: white;
+            padding: 10px 22px;
+            font-size: 14px;
             border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .add-prompt-btn:hover { background: #3a6fd9; }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
-        .prompting-table {
-        width: 100%;
-        margin-top: 16px;
-        border-collapse: collapse;
-        background: #2a2a2a;
-        font-size: 14px;
+        .filter-chip {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-chip:hover { border-color: #555; color: #ccc; }
+        .filter-chip.active { border-color: #4f8cff; background: rgba(79,140,255,0.12); color: #4f8cff; }
+
+        /* Prompt cards grid */
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
-        .prompting-table th,
-        .prompting-table td {
-        border: 1px solid #444;
-        padding: 10px;
-        text-align: center;
+        .prompt-card {
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .prompt-card:hover { border-color: #3a3a3a; }
+
+        .prompt-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
         }
 
-        .prompting-table th {
-        background-color: #333;
-        font-weight: bold;
+        .prompt-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .prompting-table tr:hover {
-        background-color: #3a3a3a;
+        .prompt-index {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: #444;
+            width: 28px;
         }
 
-        input, textarea, button {
-        font-family: inherit;
+        .prompt-name {
+            font-weight: 600;
+            font-size: 15px;
         }
 
-        .form-content {
-        max-width: 520px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        .method-tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
         }
 
-        .radar-container {
-            max-width: 400px;
-            margin: 0 auto;
+        .tag-base    { background: #252525; color: #888; border: 1px solid #333; }
+        .tag-cot     { background: rgba(168,85,247,0.15); color: #a855f7; border: 1px solid rgba(168,85,247,0.3); }
+        .tag-icl     { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .tag-fc      { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .tag-fcot    { background: rgba(79,140,255,0.12); color: #4f8cff; border: 1px solid rgba(79,140,255,0.25); }
+        .tag-if      { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+
+        .prompt-scores {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #666;
         }
+
+        .prompt-scores span { display: flex; align-items: center; gap: 5px; }
+        .score-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+        .chevron {
+            color: #444;
+            font-size: 18px;
+            transition: transform 0.2s;
+            line-height: 1;
+        }
+        .prompt-card.expanded .chevron { transform: rotate(180deg); }
+
+        .prompt-card-body {
+            display: none;
+            padding: 0 20px 20px;
+            border-top: 1px solid #222;
+        }
+        .prompt-card.expanded .prompt-card-body { display: block; }
+
+        .body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .body-section h4 {
+            font-size: 11px;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #555;
+            margin: 0 0 8px;
+        }
+
+        .prompt-text {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            line-height: 1.65;
+            color: #b0b0b0;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .prompt-text::-webkit-scrollbar { width: 4px; }
+        .prompt-text::-webkit-scrollbar-track { background: #111; }
+        .prompt-text::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+        .notes-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        .scores-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .score-tile {
+            background: #111;
+            border: 1px solid #252525;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .score-tile-label {
+            font-size: 11px;
+            color: #555;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .score-tile-value {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: #1a1a1a;
+            border: 1px solid #2e2e2e;
+            border-radius: 14px;
+            padding: 32px;
+            width: 680px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 { margin: 0 0 24px; font-size: 20px; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; color: #888; margin-bottom: 6px; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #333;
+            background: #111; color: #e5e5e5; font-family: 'DM Sans', sans-serif; font-size: 14px;
+        }
+        .form-group textarea { height: 180px; resize: vertical; font-family: 'Space Mono', monospace; font-size: 13px; }
+        .form-group select option { background: #1a1a1a; }
+
+        .score-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .score-inputs input { text-align: center; font-family: 'Space Mono', monospace; }
+
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+        .modal-cancel { background: #2e2e2e; color: #ccc; padding: 10px 22px; border-radius: 8px; border: none; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+        .modal-save { background: #4f8cff; color: white; padding: 10px 22px; border-radius: 8px; border: none; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 
 <body>
+
+<!-- ── TOP NAV ── -->
+<nav class="top-nav">
+    <div class="nav-title">MAMAS</div>
+    <button class="tab-btn active" onclick="switchTab('analysis')">Analysis</button>
+    <button class="tab-btn" onclick="switchTab('prompts')">Prompts</button>
+</nav>
+
+<!-- ══════════════════════ ANALYSIS PAGE ══════════════════════ -->
+<div class="page active" id="page-analysis">
     <h1>Multi-Agent Misinformation Analysis System</h1>
     <div class="container">
         <div class="left-panel">
@@ -203,10 +457,8 @@
                     </div>
                 </div>
             </form>
-            <h3 style="margin-top: 30px; text-align:center;">
-                Agent Performance
-            </h3>
-            
+
+            <div class="section-label">Agent Performance</div>
             <table class="prompting-table">
                 <thead>
                     <tr>
@@ -218,194 +470,570 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><b>Base Prompt</b></td>
-                        <td>0.30</td>
-                        <td>0.10</td>
-                        <td>0.43</td>
-                        <td>0.38</td>
-                    </tr>
-                    <tr>
-                        <td><b>Chain-of-Thought</b></td>
-                        <td>0.40</td>
-                        <td>0.05</td>
-                        <td>0.58</td>
-                        <td>0.38</td>
-                    </tr>
-                    <tr>
-                        <td><b>ICL</b></td>
-                        <td><b>0.68</b></td>
-                        <td>0.55</td>
-                        <td>0.58</td>
-                        <td>0.45</td>
-                    </tr>
-                    <tr>
-                        <td><b>Function Calling</b></td>
-                        <td>0.52</td>
-                        <td>0.13</td>
-                        <td>0.50</td>
-                        <td>0.40</td>
-                    </tr>
-                    <tr>
-                        <td><b>Fractal CoT 1 - gemini-2.5-flash-lite</b></td>
-                        <td>0.20</td>
-                        <td>0.78</td>
-                        <td>0.45</td>
-                        <td>0.40</td>
-                    </tr>
-                    <tr>
-                        <td><b>Fractal CoT 1</b></td>
-                        <td>0.55</td>
-                        <td>0.23</td>
-                        <td>0.53</td>
-                        <td>0.48</td>
-                    </tr>
-                    <tr>
-                        <td><b>Fractal CoT 2</b></td>
-                        <td>0.43</td>
-                        <td>0.83</td>
-                        <td>0.53</td>
-                        <td>0.48</td>
-                    </tr>
-                    <tr>
-                        <td><b>Fractal CoT 3</b></td>
-                        <td>0.53</td>
-                        <td>0.95</td>
-                        <td>0.58</td>
-                        <td><b>0.48</b></td>
-                    </tr>
-                    <tr>
-                        <td><b>Instruction Fidelity</b></td>
-                        <td>0.40</td>
-                        <td>0.93</td>
-                        <td>0.55</td>
-                        <td>0.30</td>
-                    </tr>
-                    <tr>
-                        <td><b>Fractal CoT 4</b></td>
-                        <td>0.65</td>
-                        <td><b>0.95</b></td>
-                        <td><b>0.68</b></td>
-                        <td>0.40</td>
-                    </tr>
+                    <tr><td><b>Base Prompt</b></td><td>0.30</td><td>0.10</td><td>0.43</td><td>0.38</td></tr>
+                    <tr><td><b>Chain-of-Thought</b></td><td>0.40</td><td>0.05</td><td>0.58</td><td>0.38</td></tr>
+                    <tr><td><b>ICL</b></td><td><b>0.68</b></td><td>0.55</td><td>0.58</td><td>0.45</td></tr>
+                    <tr><td><b>Function Calling</b></td><td>0.52</td><td>0.13</td><td>0.50</td><td>0.40</td></tr>
+                    <tr><td><b>Fractal CoT 1 – gemini-2.5-flash-lite</b></td><td>0.20</td><td>0.78</td><td>0.45</td><td>0.40</td></tr>
+                    <tr><td><b>Fractal CoT 1</b></td><td>0.55</td><td>0.23</td><td>0.53</td><td>0.48</td></tr>
+                    <tr><td><b>Fractal CoT 2</b></td><td>0.43</td><td>0.83</td><td>0.53</td><td>0.48</td></tr>
+                    <tr><td><b>Fractal CoT 3</b></td><td>0.53</td><td>0.95</td><td>0.58</td><td><b>0.48</b></td></tr>
+                    <tr><td><b>Instruction Fidelity</b></td><td>0.40</td><td>0.93</td><td>0.55</td><td>0.30</td></tr>
+                    <tr><td><b>Fractal CoT 4</b></td><td>0.65</td><td><b>0.95</b></td><td><b>0.68</b></td><td>0.40</td></tr>
                 </tbody>
             </table>
-            <div class="table-footnote">
-                <sup>*</sup> All prompts prior to FCoT were incrementally built on the preceding prompt. 
-                Unless stated otherwise, all agents used gemini-3-flash-preview.
-            </div>
-            
-            <h3 style="margin-top: 30px; text-align:center;">
-                Baseline Agent Score Profiles
-            </h3>
-            <div class="radar-container">
-                <canvas id="promptRadarChart1"></canvas>
-            </div>
-            
-            <h3 style="margin-top: 20px; text-align:center;">
-                Fractal CoT Agent Score Profiles
-            </h3>
-            <div class="radar-container">
-                <canvas id="promptRadarChart2"></canvas>
-            </div>        
+
+            <div class="section-label">Baseline Agent Score Profiles</div>
+            <div class="radar-container"><canvas id="promptRadarChart1"></canvas></div>
+
+            <div class="section-label" style="margin-top:24px;">Fractal CoT Agent Score Profiles</div>
+            <div class="radar-container"><canvas id="promptRadarChart2"></canvas></div>
         </div>
 
         <div class="right-panel">
             <div class="spinner" id="spinner"></div>
-            <div id="result">
-                <!-- Overall score, synopsis, and table will appear here -->
-            </div>
+            <div id="result"></div>
         </div>
     </div>
+</div>
+
+<!-- ══════════════════════ PROMPTS PAGE ══════════════════════ -->
+<div class="page" id="page-prompts">
+    <div class="prompts-page">
+        <div class="prompts-header">
+            <div>
+                <h2>Prompt Library</h2>
+                <p>All prompting strategies tested across agents</p>
+            </div>
+            <button class="add-prompt-btn" onclick="openModal()">+ Add Prompt</button>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-chip active" onclick="filterPrompts('all', this)">All</div>
+            <div class="filter-chip" onclick="filterPrompts('base', this)">Base</div>
+            <div class="filter-chip" onclick="filterPrompts('cot', this)">Chain-of-Thought</div>
+            <div class="filter-chip" onclick="filterPrompts('icl', this)">ICL</div>
+            <div class="filter-chip" onclick="filterPrompts('fc', this)">Function Calling</div>
+            <div class="filter-chip" onclick="filterPrompts('fcot', this)">Fractal CoT</div>
+            <div class="filter-chip" onclick="filterPrompts('if', this)">Instruction Fidelity</div>
+        </div>
+
+        <div class="prompts-grid" id="promptsGrid"></div>
+    </div>
+</div>
+
+<!-- ══════════════════════ ADD PROMPT MODAL ══════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h3>Add New Prompt</h3>
+        <div class="form-group">
+            <label>Prompt Name</label>
+            <input type="text" id="mName" placeholder="e.g. Fractal CoT 5">
+        </div>
+        <div class="form-group">
+            <label>Method Type</label>
+            <select id="mType">
+                <option value="base">Base</option>
+                <option value="cot">Chain-of-Thought</option>
+                <option value="icl">ICL</option>
+                <option value="fc">Function Calling</option>
+                <option value="fcot">Fractal CoT</option>
+                <option value="if">Instruction Fidelity</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Model</label>
+            <input type="text" id="mModel" placeholder="e.g. gemini-3-flash-preview">
+        </div>
+        <div class="form-group">
+            <label>Prompt Text</label>
+            <textarea id="mPrompt" placeholder="Paste the full prompt here..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Scores (0–1)</label>
+            <div class="score-inputs">
+                <input type="number" id="mFH" placeholder="Freq. Heur." step="0.01" min="0" max="1">
+                <input type="number" id="mMA" placeholder="Mal. Acct." step="0.01" min="0" max="1">
+                <input type="number" id="mSens" placeholder="Sensational." step="0.01" min="0" max="1">
+                <input type="number" id="mNR" placeholder="Naive Real." step="0.01" min="0" max="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Notes / Observations</label>
+            <textarea id="mNotes" placeholder="What worked, what didn't, key observations..." style="font-family: 'DM Sans', sans-serif; font-size:14px; height:100px;"></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+            <button class="modal-save" onclick="savePrompt()">Save Prompt</button>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
+// ── Tab switching ──
+function switchTab(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// ── Prompt data ──
+let prompts = [
+    {
+        id: 1,
+        name: "Base Prompt",
+        type: "base",
+        model: "gemini-3-flash-preview",
+        prompt: `You are a misinformation detection agent. Analyze the following article and evaluate it on four dimensions:
+
+1. Frequency Heuristic: Does the article repeat claims to make them seem more credible?
+2. Malicious Account: Are there signs of coordinated or inauthentic behavior?
+3. Sensationalism: Does the article use emotionally charged or exaggerated language?
+4. Naive Realism: Does the article present a one-sided view as objective truth?
+
+For each dimension, provide a score from 0 (low concern) to 1 (high concern).
+
+Article: {article}`,
+        scores: { fh: 0.30, ma: 0.10, sens: 0.43, nr: 0.38 },
+        notes: "Baseline prompt. Simple instruction-following with no examples or scaffolding. Struggled with Malicious Account due to lack of context about what signals to look for."
+    },
+    {
+        id: 2,
+        name: "Chain-of-Thought",
+        type: "cot",
+        model: "gemini-3-flash-preview",
+        prompt: `You are a misinformation detection agent. Analyze the following article step by step.
+
+For each of the four factuality dimensions below, think through your reasoning carefully before assigning a score:
+
+1. Frequency Heuristic – Do certain claims repeat in a way that manufactures credibility?
+   Think: What claims recur? How often? Does repetition substitute for evidence?
+
+2. Malicious Account – Are there signals of coordinated inauthentic behavior?
+   Think: Who is cited? Are sources vague or anonymous? Does the article echo known disinfo patterns?
+
+3. Sensationalism – Is emotional or exaggerated language used to distort perception?
+   Think: What loaded words appear? Does tone match content severity?
+
+4. Naive Realism – Is a subjective viewpoint dressed up as objective fact?
+   Think: Are alternative perspectives acknowledged? Is nuance present?
+
+Show your reasoning step by step, then give each dimension a score from 0–1.
+
+Article: {article}`,
+        scores: { fh: 0.40, ma: 0.05, sens: 0.58, nr: 0.38 },
+        notes: "Added explicit reasoning steps per dimension. Improved Frequency Heuristic and Sensationalism but Malicious Account actually dropped—possibly because the CoT scaffolding led the model to over-explain its uncertainty."
+    },
+    {
+        id: 3,
+        name: "In-Context Learning (ICL)",
+        type: "icl",
+        model: "gemini-3-flash-preview",
+        prompt: `You are a misinformation detection agent. Below are two example analyses, followed by the article you must evaluate.
+
+--- EXAMPLE 1 (High misinformation) ---
+Article excerpt: "Experts CONFIRM vaccines cause autism — this is being HIDDEN from you!"
+Frequency Heuristic: 0.85 — The claim is repeated 4 times with escalating language.
+Malicious Account: 0.90 — No named experts, classic disinfo framing.
+Sensationalism: 0.95 — All-caps, fear language, conspiracy framing.
+Naive Realism: 0.80 — Presents fringe view as established fact.
+
+--- EXAMPLE 2 (Low misinformation) ---
+Article excerpt: "A new study suggests a possible link between X and Y, though researchers caution the sample size was small."
+Frequency Heuristic: 0.10 — Single claim, appropriately hedged.
+Malicious Account: 0.05 — Named institution, peer-reviewed citation.
+Sensationalism: 0.08 — Neutral, precise language.
+Naive Realism: 0.12 — Uncertainty acknowledged.
+
+--- YOUR TASK ---
+Now analyze this article using the same four dimensions. Output scores from 0–1 and brief reasoning.
+
+Article: {article}`,
+        scores: { fh: 0.68, ma: 0.55, sens: 0.58, nr: 0.45 },
+        notes: "Biggest jump in Frequency Heuristic. The few-shot examples gave the model concrete anchors for calibration. Best overall baseline performance."
+    },
+    {
+        id: 4,
+        name: "Function Calling",
+        type: "fc",
+        model: "gemini-3-flash-preview",
+        prompt: `You are a misinformation detection agent with access to structured output tools.
+
+When analyzing an article, you MUST call the score_article function with the following fields:
+- frequency_heuristic: float (0–1)
+- malicious_account: float (0–1)
+- sensationalism: float (0–1)
+- naive_realism: float (0–1)
+- reasoning: object with keys for each dimension
+- confidence: overall confidence (0–100)
+- truthfulness_label: one of ["true", "mostly-true", "half-true", "mostly-false", "false", "pants-fire"]
+- synopsis: brief summary of findings
+
+Do not respond in prose. Only use the function call.
+
+Article: {article}`,
+        scores: { fh: 0.52, ma: 0.13, sens: 0.50, nr: 0.40 },
+        notes: "Enforced structured output via function calling schema. Good for consistency but Malicious Account remained weak—the model seems to need more explicit signal detection guidance regardless of output format."
+    },
+    {
+        id: 5,
+        name: "Fractal CoT 1 (gemini-2.5-flash-lite)",
+        type: "fcot",
+        model: "gemini-2.5-flash-lite",
+        prompt: `[SYSTEM: Fractal Chain-of-Thought v1]
+You are a misinformation analysis agent. Apply recursive decomposition to your reasoning.
+
+For each factuality dimension, break your analysis into sub-questions before scoring:
+
+FREQUENCY HEURISTIC
+  └── Sub-Q1: What specific claims repeat?
+  └── Sub-Q2: Is repetition used in lieu of evidence?
+  └── Sub-Q3: Does frequency create false consensus?
+
+MALICIOUS ACCOUNT
+  └── Sub-Q1: Who are the sources? Are they verifiable?
+  └── Sub-Q2: Does the narrative match known disinfo templates?
+  └── Sub-Q3: Is there coordinated language across the article?
+
+SENSATIONALISM
+  └── Sub-Q1: What emotionally charged words appear?
+  └── Sub-Q2: Does the tone match the severity of the claim?
+  └── Sub-Q3: Are hedging words absent where they should appear?
+
+NAIVE REALISM
+  └── Sub-Q1: Are counter-perspectives represented?
+  └── Sub-Q2: Is epistemic humility present?
+  └── Sub-Q3: Does the author conflate opinion with fact?
+
+Answer each sub-question, then synthesize into a final score (0–1) per dimension.
+
+Article: {article}`,
+        scores: { fh: 0.20, ma: 0.78, sens: 0.45, nr: 0.40 },
+        notes: "First FCoT experiment, run on the lighter gemini-2.5-flash-lite model. Malicious Account jumped dramatically (0.78) — the sub-question decomposition appears to force the model to seek out concrete signals. Frequency Heuristic dropped, possibly due to model capacity."
+    },
+    {
+        id: 6,
+        name: "Fractal CoT 1 (gemini-3)",
+        type: "fcot",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Fractal Chain-of-Thought v1]
+You are a misinformation analysis agent. Apply recursive decomposition to your reasoning.
+
+For each factuality dimension, break your analysis into sub-questions before scoring:
+
+FREQUENCY HEURISTIC
+  └── Sub-Q1: What specific claims repeat?
+  └── Sub-Q2: Is repetition used in lieu of evidence?
+  └── Sub-Q3: Does frequency create false consensus?
+
+MALICIOUS ACCOUNT
+  └── Sub-Q1: Who are the sources? Are they verifiable?
+  └── Sub-Q2: Does the narrative match known disinfo templates?
+  └── Sub-Q3: Is there coordinated language across the article?
+
+SENSATIONALISM
+  └── Sub-Q1: What emotionally charged words appear?
+  └── Sub-Q2: Does the tone match the severity of the claim?
+  └── Sub-Q3: Are hedging words absent where they should appear?
+
+NAIVE REALISM
+  └── Sub-Q1: Are counter-perspectives represented?
+  └── Sub-Q2: Is epistemic humility present?
+  └── Sub-Q3: Does the author conflate opinion with fact?
+
+Answer each sub-question, then synthesize into a final score (0–1) per dimension.
+
+Article: {article}`,
+        scores: { fh: 0.55, ma: 0.23, sens: 0.53, nr: 0.48 },
+        notes: "Same prompt as FCoT 1 but on gemini-3-flash-preview. Malicious Account fell sharply vs flash-lite — suggests the stronger model may over-reason and second-guess itself on ambiguous signals."
+    },
+    {
+        id: 7,
+        name: "Fractal CoT 2",
+        type: "fcot",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Fractal Chain-of-Thought v2 — with ICL anchoring]
+You are a misinformation analysis agent using recursive decomposition.
+
+Before applying sub-questions, calibrate using this reference:
+- Score ~0.9: "SHOCKING: Scientists PROVE the government is hiding cancer cure!"
+- Score ~0.1: "Preliminary data suggests modest correlation; further study warranted."
+
+Now apply the FCoT framework:
+
+FREQUENCY HEURISTIC → Sub-questions: claim repetition, evidence substitution, false consensus creation
+MALICIOUS ACCOUNT   → Sub-questions: source verifiability, disinfo template match, coordinated language
+SENSATIONALISM      → Sub-questions: emotional vocabulary, tone-severity mismatch, absent hedging
+NAIVE REALISM       → Sub-questions: counter-perspective inclusion, epistemic humility, fact-opinion conflation
+
+Answer sub-questions, synthesize score per dimension, then call score_article().
+
+Article: {article}`,
+        scores: { fh: 0.43, ma: 0.83, sens: 0.53, nr: 0.48 },
+        notes: "Combined FCoT decomposition with ICL anchoring examples. Malicious Account recovered strongly (0.83). The calibration examples appear to help the model recognize disinfo patterns even within the fractal reasoning structure."
+    },
+    {
+        id: 8,
+        name: "Fractal CoT 3",
+        type: "fcot",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Fractal Chain-of-Thought v3 — with ICL, structured output, and confidence weighting]
+You are a misinformation analysis agent. Use recursive decomposition with the following protocol:
+
+CALIBRATION ANCHORS:
+  High (0.85–1.0): "SHOCKING: Scientists PROVE the government is hiding cancer cure!"
+  Low  (0.05–0.15): "Preliminary data suggests modest correlation; further study warranted."
+
+ANALYSIS PROTOCOL (per dimension):
+  Step 1 — Identify relevant text segments
+  Step 2 — Apply sub-questions (see below)
+  Step 3 — Assign raw score + confidence (0–100%)
+  Step 4 — Adjust score based on confidence
+
+SUB-QUESTIONS:
+  Frequency Heuristic: claim repetition | evidence substitution | false consensus
+  Malicious Account:   source verifiability | disinfo template | coordinated language
+  Sensationalism:      emotional vocabulary | tone-severity gap | missing hedges
+  Naive Realism:       opposing views | epistemic humility | opinion-as-fact
+
+OUTPUT via score_article() with all fields including per-dimension confidence.
+
+Article: {article}`,
+        scores: { fh: 0.53, ma: 0.95, sens: 0.58, nr: 0.48 },
+        notes: "Added confidence weighting and text-segment identification step. Malicious Account hit 0.95 — best result yet. The grounding step (identify segments first) appears critical for this dimension."
+    },
+    {
+        id: 9,
+        name: "Instruction Fidelity",
+        type: "if",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Instruction Fidelity Protocol]
+You are a precision misinformation analysis agent. Your PRIMARY obligation is strict instruction adherence.
+
+MANDATORY SEQUENCE — do not skip or reorder steps:
+  [1] Read the article in full without forming judgments.
+  [2] Extract all factual claims as a numbered list.
+  [3] For each claim, note: source, verifiability, repetition count.
+  [4] Apply the four-dimension framework using ONLY evidence from step 3.
+  [5] Score each dimension 0–1 with explicit claim references.
+  [6] Perform self-check: "Does my score align with the evidence I extracted?"
+  [7] Call score_article() with final scores and reasoning.
+
+FAILURE CONDITIONS (if any occur, restart from step 1):
+  - Assigning a score without citing a specific claim
+  - Skipping the self-check step
+  - Using language like "seems" or "appears" without evidence
+
+Article: {article}`,
+        scores: { fh: 0.40, ma: 0.93, sens: 0.55, nr: 0.30 },
+        notes: "Focused on forcing procedural compliance. Malicious Account stayed high (0.93) likely because the claim-extraction step surfaces disinfo signals naturally. Naive Realism dropped — the rigid procedure may suppress the model's ability to assess epistemic framing holistically."
+    },
+    {
+        id: 10,
+        name: "Fractal CoT 4",
+        type: "fcot",
+        model: "gemini-3-flash-preview",
+        prompt: `[SYSTEM: Fractal Chain-of-Thought v4 — Full Protocol]
+You are an expert misinformation detection agent. Execute the following protocol precisely.
+
+═══ PHASE 1: CLAIM EXTRACTION ═══
+List every factual claim in the article. For each, note:
+  • Source (named/unnamed/institutional)
+  • Verifiable? (yes/no/unclear)
+  • Repetition count across article
+
+═══ PHASE 2: FRACTAL ANALYSIS ═══
+For each dimension, apply recursive sub-questions to your Phase 1 data:
+
+  FREQUENCY HEURISTIC
+    ├── Which claims repeat? (cite count)
+    ├── Is repetition substituting for evidence?
+    └── Does it manufacture false consensus?
+
+  MALICIOUS ACCOUNT
+    ├── Are sources named and verifiable?
+    ├── Does narrative match known disinfo templates?
+    └── Is there coordinated or echoed language?
+
+  SENSATIONALISM
+    ├── List emotionally charged words/phrases
+    ├── Does tone match actual claim severity?
+    └── Are appropriate hedges absent?
+
+  NAIVE REALISM
+    ├── Are counter-perspectives represented?
+    ├── Is epistemic humility shown?
+    └── Is subjective framing presented as fact?
+
+═══ PHASE 3: CALIBRATION CHECK ═══
+Compare each score against anchors:
+  ~0.9 = "SHOCKING: Scientists PROVE government hides cancer cure!"
+  ~0.1 = "Data suggests modest correlation; further study needed."
+
+═══ PHASE 4: SELF-AUDIT ═══
+For each score, confirm: "I can cite specific text evidence for this score."
+Adjust if not.
+
+═══ PHASE 5: STRUCTURED OUTPUT ═══
+Call score_article() with all fields.
+
+Article: {article}`,
+        scores: { fh: 0.65, ma: 0.95, sens: 0.68, nr: 0.40 },
+        notes: "Best overall performer. The phased structure — extract → decompose → calibrate → audit → output — appears to address all failure modes simultaneously. Frequency Heuristic and Sensationalism hit their highest scores. Malicious Account maintained 0.95."
+    }
+];
+
+let activeFilter = 'all';
+
+const tagMap = {
+    base: { label: 'Base', cls: 'tag-base' },
+    cot:  { label: 'Chain-of-Thought', cls: 'tag-cot' },
+    icl:  { label: 'ICL', cls: 'tag-icl' },
+    fc:   { label: 'Function Calling', cls: 'tag-fc' },
+    fcot: { label: 'Fractal CoT', cls: 'tag-fcot' },
+    if:   { label: 'Instruction Fidelity', cls: 'tag-if' }
+};
+
+const scoreColor = v => v >= 0.7 ? '#4ade80' : v >= 0.5 ? '#facc15' : v >= 0.3 ? '#fb923c' : '#f87171';
+
+function renderPrompts() {
+    const grid = document.getElementById('promptsGrid');
+    const filtered = activeFilter === 'all' ? prompts : prompts.filter(p => p.type === activeFilter);
+    grid.innerHTML = filtered.map((p, i) => {
+        const tag = tagMap[p.type];
+        const s = p.scores;
+        return `
+        <div class="prompt-card" id="card-${p.id}">
+            <div class="prompt-card-header" onclick="toggleCard(${p.id})">
+                <div class="prompt-card-meta">
+                    <span class="prompt-index">#${String(i+1).padStart(2,'0')}</span>
+                    <span class="prompt-name">${p.name}</span>
+                    <span class="method-tag ${tag.cls}">${tag.label}</span>
+                    ${p.model ? `<span style="font-size:12px;color:#555;">${p.model}</span>` : ''}
+                </div>
+                <div style="display:flex;align-items:center;gap:20px;">
+                    <div class="prompt-scores">
+                        <span><span class="score-dot" style="background:${scoreColor(s.fh)}"></span>FH ${s.fh}</span>
+                        <span><span class="score-dot" style="background:${scoreColor(s.ma)}"></span>MA ${s.ma}</span>
+                        <span><span class="score-dot" style="background:${scoreColor(s.sens)}"></span>S ${s.sens}</span>
+                        <span><span class="score-dot" style="background:${scoreColor(s.nr)}"></span>NR ${s.nr}</span>
+                    </div>
+                    <span class="chevron">⌄</span>
+                </div>
+            </div>
+            <div class="prompt-card-body">
+                <div class="scores-detail-grid">
+                    <div class="score-tile">
+                        <div class="score-tile-label">Freq. Heuristic</div>
+                        <div class="score-tile-value" style="color:${scoreColor(s.fh)}">${s.fh}</div>
+                    </div>
+                    <div class="score-tile">
+                        <div class="score-tile-label">Malicious Acct.</div>
+                        <div class="score-tile-value" style="color:${scoreColor(s.ma)}">${s.ma}</div>
+                    </div>
+                    <div class="score-tile">
+                        <div class="score-tile-label">Sensationalism</div>
+                        <div class="score-tile-value" style="color:${scoreColor(s.sens)}">${s.sens}</div>
+                    </div>
+                    <div class="score-tile">
+                        <div class="score-tile-label">Naive Realism</div>
+                        <div class="score-tile-value" style="color:${scoreColor(s.nr)}">${s.nr}</div>
+                    </div>
+                </div>
+                <div class="body-grid">
+                    <div class="body-section">
+                        <h4>Prompt Text</h4>
+                        <div class="prompt-text">${p.prompt.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+                    </div>
+                    <div class="body-section">
+                        <h4>Notes &amp; Observations</h4>
+                        <div class="notes-text">${p.notes || '—'}</div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleCard(id) {
+    document.getElementById('card-' + id).classList.toggle('expanded');
+}
+
+function filterPrompts(type, el) {
+    activeFilter = type;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderPrompts();
+}
+
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+function savePrompt() {
+    const name = document.getElementById('mName').value.trim();
+    if (!name) { alert('Please enter a prompt name.'); return; }
+    const newPrompt = {
+        id: Date.now(),
+        name,
+        type: document.getElementById('mType').value,
+        model: document.getElementById('mModel').value.trim(),
+        prompt: document.getElementById('mPrompt').value,
+        scores: {
+            fh:   parseFloat(document.getElementById('mFH').value)   || 0,
+            ma:   parseFloat(document.getElementById('mMA').value)   || 0,
+            sens: parseFloat(document.getElementById('mSens').value) || 0,
+            nr:   parseFloat(document.getElementById('mNR').value)   || 0,
+        },
+        notes: document.getElementById('mNotes').value
+    };
+    prompts.push(newPrompt);
+    closeModal();
+    renderPrompts();
+    ['mName','mModel','mPrompt','mFH','mMA','mSens','mNR','mNotes'].forEach(id => document.getElementById(id).value = '');
+}
+
+renderPrompts();
+
+// ── Analysis form ──
 document.getElementById("articleForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const btn = document.getElementById("analyzeBtn");
     const spinner = document.getElementById("spinner");
     const resultDiv = document.getElementById("result");
-
     resultDiv.innerHTML = "";
     spinner.style.display = "block";
     btn.disabled = true;
     btn.innerText = "Analyzing...";
-
     const formData = new FormData(e.target);
-
     try {
-        const response = await fetch("/score", {
-            method: "POST",
-            body: formData
-        });
-
+        const response = await fetch("/score", { method: "POST", body: formData });
         const data = await response.json();
-
         if (data.error) {
             resultDiv.innerHTML = "Error: " + data.error;
         } else {
-            // Compute overall score
-            const labelMap = {
-                "pants-fire": "Pants on Fire",
-                "false": "False",
-                "mostly-false": "Mostly False",
-                "half-true": "Half True",
-                "mostly-true": "Mostly True",
-                "true": "True"
-            };
-            
+            const labelMap = { "pants-fire": "Pants on Fire", "false": "False", "mostly-false": "Mostly False", "half-true": "Half True", "mostly-true": "Mostly True", "true": "True" };
+            const labelColors = { "pants-fire": "#ff4444", "false": "#ff6b6b", "mostly-false": "#ffaa44", "half-true": "#ffdd44", "mostly-true": "#88cc44", "true": "#44cc88" };
             const overallRating = labelMap[data.truthfulness_label] || data.truthfulness_label || "Unknown";
-
-            const labelColors = {
-                "pants-fire": "#ff4444",
-                "false": "#ff6b6b",
-                "mostly-false": "#ffaa44",
-                "half-true": "#ffdd44",
-                "mostly-true": "#88cc44",
-                "true": "#44cc88"
-            };
-            
             const labelColor = labelColors[data.truthfulness_label] || "#e5e5e5";
-
             let html = `
-                <div class="overall-score">This article is: <span style="color: ${labelColor}">${overallRating}</span></div>
+                <div class="overall-score">This article is: <span style="color:${labelColor}">${overallRating}</span></div>
                 <div class="synopsis"><b>Synopsis:</b> ${data.synopsis || "Summary not available"}</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Factuality Factor</th>
-                            <th>Score</th>
-                            <th>Reasoning</th>
-                            <th>Confidence</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            function row(name, obj) {
-                return `
-                <tr>
-                    <td><b>${name}</b></td>
-                    <td>${obj.score}</td>
-                    <td class="reasoning">${obj.reasoning}</td>
-                    <td>${obj.confidence}%</td>
-                </tr>`;
-            }
-
+                <table><thead><tr><th>Factuality Factor</th><th>Score</th><th>Reasoning</th><th>Confidence</th></tr></thead><tbody>`;
+            const row = (name, obj) => `<tr><td><b>${name}</b></td><td>${obj.score}</td><td class="reasoning">${obj.reasoning}</td><td>${obj.confidence}%</td></tr>`;
             html += row("Frequency Heuristic", data.frequency_heuristic);
             html += row("Malicious Account", data.malicious_account);
             html += row("Sensationalism", data.sensationalism);
             html += row("Naive Realism", data.naive_realism);
             html += "</tbody></table>";
-
             resultDiv.innerHTML = html;
         }
-    } catch (err) {
-        resultDiv.innerHTML = "Network error or server issue.";
-    }
-
+    } catch (err) { resultDiv.innerHTML = "Network error or server issue."; }
     spinner.style.display = "none";
     btn.disabled = false;
     btn.innerText = "Analyze";
@@ -419,117 +1047,37 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 </script>
 
 <script>
-    // Chart 1 - Non-FCoT methods
-    const ctx1 = document.getElementById('promptRadarChart1');
-    new Chart(ctx1, {
-        type: 'radar',
-        data: {
-            labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
-            datasets: [
-                {
-                    label: 'Base Prompt',
-                    data: [0.30, 0.10, 0.43, 0.38],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'Chain-of-Thought',
-                    data: [0.40, 0.05, 0.58, 0.38],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'ICL',
-                    data: [0.55, 0.55, 0.60, 0.70],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'Function Calling',
-                    data: [0.68, 0.55, 0.58, 0.45],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'Instruction Fidelity',
-                    data: [0.40, 0.93, 0.55, 0.35],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                r: {
-                    min: 0, max: 1,
-                    ticks: { stepSize: 0.2, color: '#ccc' },
-                    grid: { color: '#444' },
-                    pointLabels: { color: '#eee', font: { size: 13 } }
-                }
-            },
-            plugins: {
-                legend: { labels: { color: '#eee' } },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`
-                    }
-                }
-            }
-        }
-    });
+const ctx1 = document.getElementById('promptRadarChart1');
+new Chart(ctx1, {
+    type: 'radar',
+    data: {
+        labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
+        datasets: [
+            { label: 'Base Prompt', data: [0.30,0.10,0.43,0.38], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'Chain-of-Thought', data: [0.40,0.05,0.58,0.38], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'ICL', data: [0.55,0.55,0.60,0.70], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'Function Calling', data: [0.68,0.55,0.58,0.45], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'Instruction Fidelity', data: [0.40,0.93,0.55,0.35], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 }
+        ]
+    },
+    options: { responsive: true, scales: { r: { min: 0, max: 1, ticks: { stepSize: 0.2, color: '#ccc' }, grid: { color: '#444' }, pointLabels: { color: '#eee', font: { size: 12 } } } }, plugins: { legend: { labels: { color: '#eee' } } } }
+});
 
-    // Chart 2 - FCoT only
-    const ctx2 = document.getElementById('promptRadarChart2');
-    new Chart(ctx2, {
-        type: 'radar',
-        data: {
-            labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
-            datasets: [
-                {
-                    label: 'FC + Fractal CoT',
-                    data: [0.20, 0.78, 0.45, 0.40],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'FC + FCoT - Gemini 3',
-                    data: [0.55, 0.23, 0.53, 0.48],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'FC + FCoT - Gemini 3 - 2',
-                    data: [0.43, 0.83, 0.53, 0.48],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'FC + FCoT - Gemini 3 - 3',
-                    data: [0.53, 0.95, 0.58, 0.48],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                },
-                {
-                    label: 'FC + FCoT - Gemini 3 - 4',
-                    data: [0.65, 0.95, 0.68, 0.40],
-                    borderWidth: 2, pointRadius: 4, pointHoverRadius: 8
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                r: {
-                    min: 0, max: 1,
-                    ticks: { stepSize: 0.2, color: '#ccc' },
-                    grid: { color: '#444' },
-                    pointLabels: { color: '#eee', font: { size: 13 } }
-                }
-            },
-            plugins: {
-                legend: { labels: { color: '#eee' } },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`
-                    }
-                }
-            }
-        }
-    });
-</script>    
+const ctx2 = document.getElementById('promptRadarChart2');
+new Chart(ctx2, {
+    type: 'radar',
+    data: {
+        labels: ['Frequency Heuristic', 'Malicious Account', 'Sensationalism', 'Naive Realism'],
+        datasets: [
+            { label: 'FC + Fractal CoT (flash-lite)', data: [0.20,0.78,0.45,0.40], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'FC + FCoT 1', data: [0.55,0.23,0.53,0.48], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'FC + FCoT 2', data: [0.43,0.83,0.53,0.48], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'FC + FCoT 3', data: [0.53,0.95,0.58,0.48], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 },
+            { label: 'FC + FCoT 4', data: [0.65,0.95,0.68,0.40], borderWidth: 2, pointRadius: 4, pointHoverRadius: 8 }
+        ]
+    },
+    options: { responsive: true, scales: { r: { min: 0, max: 1, ticks: { stepSize: 0.2, color: '#ccc' }, grid: { color: '#444' }, pointLabels: { color: '#eee', font: { size: 12 } } } }, plugins: { legend: { labels: { color: '#eee' } } } }
+});
+</script>
 </body>
 </html>
