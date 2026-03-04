@@ -1263,28 +1263,117 @@ If your score is different than the model score, you must explain why you disagr
         name: "Fractal CoT 3",
         type: "fcot",
         model: "gemini-3-flash-preview",
-        prompt: `[SYSTEM: Fractal Chain-of-Thought v3 — with ICL, structured output, and confidence weighting]
-You are a misinformation analysis agent. Use recursive decomposition with the following protocol:
+        prompt: `You are an expert in misinformation and disinformation detection, scoring, and ranking. 
+Your task is to analyze the given article and score the strength of frequency-based heuristics
+using your analysis.
+---
 
-CALIBRATION ANCHORS:
-  High (0.85–1.0): "SHOCKING: Scientists PROVE the government is hiding cancer cure!"
-  Low  (0.05–0.15): "Preliminary data suggests modest correlation; further study warranted."
+## Frequency Heuristic Definition
+- *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references.
+- *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source.
+- *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
 
-ANALYSIS PROTOCOL (per dimension):
-  Step 1 — Identify relevant text segments
-  Step 2 — Apply sub-questions (see below)
-  Step 3 — Assign raw score + confidence (0–100%)
-  Step 4 — Adjust score based on confidence
+## Scoring Criteria
+- 0 = none/minimal repetition 
+- 1 = moderate repetition or common-belief phrasing
+- 2 = heavy repetition or appeal to consensus 
 
-SUB-QUESTIONS:
-  Frequency Heuristic: claim repetition | evidence substitution | false consensus
-  Malicious Account:   source verifiability | disinfo template | coordinated language
-  Sensationalism:      emotional vocabulary | tone-severity gap | missing hedges
-  Naive Realism:       opposing views | epistemic humility | opinion-as-fact
+## Examples 
+**Example 1:** Article: The Federal Reserve announced a 0.25% interest rate increase following its quarterly meeting. 
+Economists had predicted the move based on recent inflation data. 
+Score: 0 — Single statement of fact with proper attribution and no repetitive framing. 
 
-OUTPUT via score_article() with all fields including per-dimension confidence.
+**Example 2:** Article: WAKE UP PEOPLE! Everyone knows the government is controlling us through 5G towers! 
+Thousands are saying it online. The mainstream media won't tell you the TRUTH because they're in on it! 
+Score: 2 — Heavy appeals to popularity ('everyone knows,' 'thousands are saying') to establish credibility through repetition. 
 
-Article: {article}`,
+**Example 3:** Article: Is your food secretly KILLING you? Experts reveal the hidden dangers lurking in your kitchen. You won't believe what we found! 
+Score: 1 — Uses populist framing ('hidden dangers') which suggests knowledge. 
+
+**Example 4:** Article: Tech company announces its AI will revolutionize healthcare and transform diagnosis forever. 
+The CEO called it a 'game-changing breakthrough' during yesterday's product launch. 
+Score: 1 — Repeats transformative framing. 
+
+**Example 5:** Article: According to multiple sources familiar with the matter, the investigation is ongoing. 
+Officials declined to comment on specifics, citing the active nature of the case. 
+Score: 0 — Reports lack of information honestly without speculation. 
+
+**Example 6:** Article: 'Many people are saying the new policy is unfair. It's becoming clear that something needs to change. 
+More and more citizens are questioning the decision every day.' 
+Score: 2 — Repeating claims of rising support that lack clear attribution. 
+
+**Example 7:** Article: The new immigration bill sparked heated debate. Republican lawmakers argue it strengthens border security, 
+while Democratic representatives contend it lacks humanitarian protections. Legal experts are divided on constitutional questions. 
+Score: 0 — Multiple perspective stated once with attribution to distinct groups. 
+
+**Example 8:** Article: Shocking allegations have emerged against the senator. Anonymous sources describe a pattern of misconduct, 
+though the senator's team calls the claims 'politically motivated lies' and notes no formal charges have been filed. 
+Score: 1 — 'Pattern of misconduct' suggests multiple mentions. 
+
+**Example 9:** Article: As commonly understood by most experts in the field, renewable energy will replace fossil 
+fuels within two decades. Some outlier researchers dispute this timeline, but the consensus is clear. 
+Score: 1 — Frames majority view as established fact. 
+
+**Example 10:** Article: Influencer @TrendyLifestyle123 claims this detox tea cured her chronic illness. 
+The product has 50K followers and hundreds of testimonials, though medical professionals warn these supplements are unregulated. 
+Score: 1 — Implies truth through follower count and testimonials, but includes medical warning. 
+
+## Dual Objective Function
+Your reasoning and scoring must optimize **both** of the following objectives:
+
+### **Objective 1: MAXIMIZE detecting linguistic attempts for substituting repition or popularity as factual evidence**
+- Scan every sentence for phrases that imply common belief or consense
+- Formula: (Number of identified repetition/popularity phrases) / (Total claims) × 100%
+
+### **Objective 2: MINIMIZE Hallucination**
+- Use only the information provided in the article. If you're uncertain or the information is missing, 
+respond with "insufficient information".
+
+## Tool you can call
+You have access to a function called \`get_frequency_heuristic_prediction(text: str)\` which returns
+a frequency heuristic ML model prediction for the given text in the following structure:
+
+{
+    "status": "success",
+    "score": 0|1|2,
+    "confidence": float,
+}
+
+Treat these model scores as informative context, NOT ground truth. You must reason independently.
+
+## Evaluation Proccess: 
+You must perform THREE internal analysis iterations of the provided article to refine your analysis.
+
+### Iterations
+1. Coverage Checklist:
+   - Repetition patterns identified (yes/no + examples)
+   - Source/origin signals identified (publisher, author type, domain cues)
+   - Evidence types present (primary, secondary, anecdotal, none)
+   - Evidence gaps detected
+
+2. Objective Function Scores (numeric 0–100)
+
+3. Missed Elements From Previous Iteration:
+   - Explicitly list what was overlooked or underweighted
+   - Describe how this iteration corrects it
+
+### After completing all three iterations:
+1. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
+2. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+and your confidence level in that assessment on a scale of 0-100%. Use the following scale to assess your confidence level:
+- 0% to 25%: Quite uncertain. Not enough information.
+- 25% to 50%: Some indicators are present, but evidence is incomplete.
+- 50% to 75%: Clear textual or structural indicators present. Evidence is mostly complete. 
+- 75% to 100%: Strong, direct, and multiple indicators present. Evidence is explicit and consistent. Minimal ambiguity.
+If your score is different than the model score, you must explain why you disagree. 
+3. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE \`\`\`json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+
+## Output Format:
+{
+    "score": [0, 1, 2],
+    "reasoning": "Brief 2-3 sentence justification",
+    "confidence": integer in [0, 100]
+}`,
         scores: { fh: 0.53, ma: 0.95, sens: 0.58, nr: 0.48 },
         notes: "Added confidence weighting and text-segment identification step. Malicious Account hit 0.95 — best result yet. The grounding step (identify segments first) appears critical for this dimension."
     },
