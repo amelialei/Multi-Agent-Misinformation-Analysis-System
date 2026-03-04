@@ -644,26 +644,72 @@ using your analysis.
         name: "In-Context Learning (ICL)",
         type: "icl",
         model: "gemini-2.5-flash",
-        prompt: `You are a misinformation detection agent. Below are two example analyses, followed by the article you must evaluate.
+        prompt: `You are an expert in misinformation and disinformation detection, scoring, and ranking. 
+Your task is to analyze the given article and score the strength of frequency-based heuristics
+using your analysis.
+---
 
---- EXAMPLE 1 (High misinformation) ---
-Article excerpt: "Experts CONFIRM vaccines cause autism — this is being HIDDEN from you!"
-Frequency Heuristic: 0.85 — The claim is repeated 4 times with escalating language.
-Malicious Account: 0.90 — No named experts, classic disinfo framing.
-Sensationalism: 0.95 — All-caps, fear language, conspiracy framing.
-Naive Realism: 0.80 — Presents fringe view as established fact.
+## Frequency Heuristic Definition
+- *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references.
+- *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source.
+- *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
 
---- EXAMPLE 2 (Low misinformation) ---
-Article excerpt: "A new study suggests a possible link between X and Y, though researchers caution the sample size was small."
-Frequency Heuristic: 0.10 — Single claim, appropriately hedged.
-Malicious Account: 0.05 — Named institution, peer-reviewed citation.
-Sensationalism: 0.08 — Neutral, precise language.
-Naive Realism: 0.12 — Uncertainty acknowledged.
+## Scoring Criteria
+- 0 = none/minimal repetition 
+- 1 = moderate repetition or common-belief phrasing
+- 2 = heavy repetition or appeal to consensus 
 
---- YOUR TASK ---
-Now analyze this article using the same four dimensions. Output scores from 0–1 and brief reasoning.
+## Examples 
+**Example 1:** Article: The Federal Reserve announced a 0.25% interest rate increase following its quarterly meeting. 
+Economists had predicted the move based on recent inflation data. 
+Score: 0 — Single statement of fact with proper attribution and no repetitive framing. 
 
-Article: {article}`,
+**Example 2:** Article: WAKE UP PEOPLE! Everyone knows the government is controlling us through 5G towers! 
+Thousands are saying it online. The mainstream media won't tell you the TRUTH because they're in on it! 
+Score: 2 — Heavy appeals to popularity ('everyone knows,' 'thousands are saying') to establish credibility through repetition. 
+
+**Example 3:** Article: Is your food secretly KILLING you? Experts reveal the hidden dangers lurking in your kitchen. You won't believe what we found! 
+Score: 1 — Uses populist framing ('hidden dangers') which suggests knowledge. 
+
+**Example 4:** Article: Tech company announces its AI will revolutionize healthcare and transform diagnosis forever. 
+The CEO called it a 'game-changing breakthrough' during yesterday's product launch. 
+Score: 1 — Repeats transformative framing. 
+
+**Example 5:** Article: According to multiple sources familiar with the matter, the investigation is ongoing. 
+Officials declined to comment on specifics, citing the active nature of the case. 
+Score: 0 — Reports lack of information honestly without speculation. 
+
+**Example 6:** Article: 'Many people are saying the new policy is unfair. It's becoming clear that something needs to change. 
+More and more citizens are questioning the decision every day.' 
+Score: 2 — Repeating claims of rising support that lack clear attribution. 
+
+**Example 7:** Article: The new immigration bill sparked heated debate. Republican lawmakers argue it strengthens border security, 
+while Democratic representatives contend it lacks humanitarian protections. Legal experts are divided on constitutional questions. 
+Score: 0 — Multiple perspective stated once with attribution to distinct groups. 
+
+**Example 8:** Article: Shocking allegations have emerged against the senator. Anonymous sources describe a pattern of misconduct, 
+though the senator's team calls the claims 'politically motivated lies' and notes no formal charges have been filed. 
+Score: 1 — 'Pattern of misconduct' suggests multiple mentions. 
+
+**Example 9:** Article: As commonly understood by most experts in the field, renewable energy will replace fossil 
+fuels within two decades. Some outlier researchers dispute this timeline, but the consensus is clear. 
+Score: 1 — Frames majority view as established fact. 
+
+**Example 10:** Article: Influencer @TrendyLifestyle123 claims this detox tea cured her chronic illness. 
+The product has 50K followers and hundreds of testimonials, though medical professionals warn these supplements are unregulated. 
+Score: 1 — Implies truth through follower count and testimonials, but includes medical warning. 
+
+## Evaluation Proccess: 
+1. Think step-by-step about the article's repitition, origin, and evidence to refine your analysis. 
+2. Use your analysis to provide a numeric score, a justification, and your confidence level in that assessment on a scale of 0-100%.
+3. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE \`\`\`json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+
+## Output Format:
+{
+    "score": 0|1|2,
+    "reasoning": "Explanation",
+    "confidence": 0-100
+}`,
         scores: { fh: 0.68, ma: 0.55, sens: 0.58, nr: 0.45 },
         notes: "Biggest jump in Frequency Heuristic. The few-shot examples gave the model concrete anchors for calibration. Best overall baseline performance."
     },
