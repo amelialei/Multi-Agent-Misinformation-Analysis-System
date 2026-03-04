@@ -202,6 +202,16 @@
             margin: 4px 0 0;
         }
 
+        .prompts-note {
+            font-size: 12px;
+            color: #555;
+            margin: 10px 0 0;
+            padding: 8px 12px;
+            border-left: 2px solid #2e2e2e;
+            max-width: 580px;
+            line-height: 1.5;
+        }
+
         .add-prompt-btn {
             background: #4f8cff;
             color: white;
@@ -504,6 +514,7 @@
             <div>
                 <h2>Prompt Library</h2>
                 <p>All prompting strategies tested across agents</p>
+                <p class="prompts-note">Note: The following prompts are for Frequency Heuristic to provide an example, but prompts were tailored to each factuality factor and can be found in the respective agents&#39; folders under <code style="font-family:monospace;color:#888;">/prompts</code>.</p>
             </div>
             <button class="add-prompt-btn" onclick="openModal()">+ Add Prompt</button>
         </div>
@@ -602,7 +613,7 @@ Return only a JSON object in the following format:
     "confidence": 0-100
 }`,
         scores: { fh: 0.30, ma: 0.10, sens: 0.43, nr: 0.38 },
-        notes: "Baseline prompt. Simple instruction-following with no examples or scaffolding. Struggled with Malicious Account due to lack of context about what signals to look for."
+        notes: "Minimal baseline with no examples, no CoT, and no structured evaluation steps. Just a definition of frequency heuristic, a 0-2 scoring range, and a JSON output requirement. Establishes the floor for all subsequent iterations."
     },
     {
         id: 2,
@@ -637,7 +648,7 @@ using your analysis.
     "confidence": 0-100
 }`,
         scores: { fh: 0.40, ma: 0.05, sens: 0.58, nr: 0.38 },
-        notes: "Added explicit reasoning steps per dimension. Improved Frequency Heuristic and Sensationalism but Malicious Account actually dropped—possibly because the CoT scaffolding led the model to over-explain its uncertainty."
+        notes: "Built on the base prompt by adding a structured definition section, explicit score-level descriptions (0/1/2), and a step-by-step CoT evaluation process. Also added a strict JSON output instruction to prevent markdown wrapping. Modest improvement across dimensions."
     },
     {
         id: 3,
@@ -711,7 +722,7 @@ Score: 1 — Implies truth through follower count and testimonials, but includes
     "confidence": 0-100
 }`,
         scores: { fh: 0.68, ma: 0.55, sens: 0.58, nr: 0.45 },
-        notes: "Biggest jump in Frequency Heuristic. The few-shot examples gave the model concrete anchors for calibration. Best overall baseline performance."
+        notes: "Added 10 labeled few-shot examples covering the full range of scores (0, 1, 2) with diverse scenarios — from neutral Fed announcements to 5G conspiracy posts. The examples span edge cases like accurate quotes of biased sources, testimonial-based credibility, and vague popularity signals. Largest single jump in Frequency Heuristic performance."
     },
     {
         id: 4,
@@ -800,7 +811,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": 0-100
 }`,
         scores: { fh: 0.52, ma: 0.13, sens: 0.50, nr: 0.40 },
-        notes: "Enforced structured output via function calling schema. Good for consistency but Malicious Account remained weak—the model seems to need more explicit signal detection guidance regardless of output format."
+        notes: "Introduced function calling by adding the get_frequency_heuristic_prediction() tool on top of the ICL prompt. The model now calls an ML model for a reference score and must explicitly reconcile disagreements. The tool is framed as informative context, not ground truth, to prevent the model from blindly deferring to it."
     },
     {
         id: 5,
@@ -907,7 +918,7 @@ You must perform THREE internal analysis iterations of the provided article to r
    - Evidence types present (primary, secondary, anecdotal, none)
    - Evidence gaps detected
 
-2. Objective Function Scores (numeric 0–100)
+2. Objective Function Scores (numeric 0-100)
 
 3. Missed Elements From Previous Iteration:
    - Explicitly list what was overlooked or underweighted
@@ -931,7 +942,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": integer in [0, 100]
 }`,
         scores: { fh: 0.40, ma: 0.93, sens: 0.55, nr: 0.30 },
-        notes: "Focused on forcing procedural compliance. Malicious Account stayed high (0.93) likely because the claim-extraction step surfaces disinfo signals naturally. Naive Realism dropped — the rigid procedure may suppress the model's ability to assess epistemic framing holistically."
+        notes: "Prepended a mandatory Instruction Fidelity block above all other instructions to prevent the model from skipping steps or hallucinating. Also strengthened Objective 2 by requiring the model to cite its sources within the article text. Malicious Account stayed high (0.93) but Naive Realism dropped — the rigid citation requirement may have overconstrained the model's ability to make holistic epistemic judgments."
     },
     {
         id: 6,
@@ -1040,7 +1051,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": 0-100
 }`,
         scores: { fh: 0.20, ma: 0.78, sens: 0.45, nr: 0.40 },
-        notes: "First FCoT experiment, run on the lighter gemini-2.5-flash-lite model. Malicious Account jumped dramatically (0.78) — the sub-question decomposition appears to force the model to seek out concrete signals. Frequency Heuristic dropped, possibly due to model capacity."
+        notes: "First Fractal CoT iteration. Added a Dual Objective Function to guide what the model should maximize vs. minimize, and introduced a 3-iteration self-refinement loop. Objective 2 defined verifiability strictly (named sources, studies, institutions). Run on gemini-2.5-flash-lite rather than the main model — an experimental comparison to measure model capacity effects."
     },
     {
         id: 7,
@@ -1149,7 +1160,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": 0-100
 }`,
         scores: { fh: 0.55, ma: 0.23, sens: 0.53, nr: 0.48 },
-        notes: "Same prompt as FCoT 1 but on gemini-3-flash-preview. Malicious Account fell sharply vs flash-lite — suggests the stronger model may over-reason and second-guess itself on ambiguous signals."
+        notes: "Identical prompt to FCoT 1 (flash-lite) but run on gemini-3-flash-preview. Frequency Heuristic improved significantly vs. the lighter model, but Malicious Account dropped sharply — suggesting the stronger model reasons more cautiously and resists flagging without strong evidence, while the lighter model was more aggressive."
     },
     {
         id: 8,
@@ -1256,7 +1267,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": 0-100
 }`,
         scores: { fh: 0.43, ma: 0.83, sens: 0.53, nr: 0.48 },
-        notes: "Combined FCoT decomposition with ICL anchoring examples. Malicious Account recovered strongly (0.83). The calibration examples appear to help the model recognize disinfo patterns even within the fractal reasoning structure."
+        notes: "Replaced Objective 2 (minimize unverifiable claims) with minimize hallucination — shifting the grounding constraint from external verifiability to internal article fidelity. Restructured the iteration format into a formal Coverage Checklist with three explicit sub-tasks per pass. Added a 4-tier confidence scale to replace the raw 0–100 number. Malicious Account recovered strongly."
     },
     {
         id: 9,
@@ -1375,7 +1386,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": integer in [0, 100]
 }`,
         scores: { fh: 0.53, ma: 0.95, sens: 0.58, nr: 0.48 },
-        notes: "Added confidence weighting and text-segment identification step. Malicious Account hit 0.95 — best result yet. The grounding step (identify segments first) appears critical for this dimension."
+        notes: "Incremental refinement of FCoT 2 — kept the same structure but tightened the output format: reasoning shortened to 2–3 sentences, score field changed from 0|1|2 to an array [0, 1, 2], and confidence changed to explicitly require an integer. These small output-format changes improved output consistency and likely contributed to more stable scoring."
     },
     {
         id: 10,
@@ -1513,7 +1524,7 @@ If your score is different than the model score, you must explain why you disagr
     "confidence": integer in [0, 100]
 }`,
         scores: { fh: 0.65, ma: 0.95, sens: 0.68, nr: 0.40 },
-        notes: "Best overall performer. The phased structure — extract → decompose → calibrate → audit → output — appears to address all failure modes simultaneously. Frequency Heuristic and Sensationalism hit their highest scores. Malicious Account maintained 0.95."
+        notes: "Key change: rewrote Objective 1 to explicitly distinguish journalist-authored bandwagon framing from accurately-quoted biased sources. This nuance — 'do not flag a politician making a bandwagon argument, flag the journalist presenting it as fact' — appears to have sharpened the model's discrimination and produced the best Frequency Heuristic and Sensationalism scores across all tested prompts."
     }
 ];
 
