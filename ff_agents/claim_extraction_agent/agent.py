@@ -49,6 +49,7 @@ claim_extraction_agent = Agent(
 claim_verification_agent = Agent(
     name="claim_verification_agent",
     model="gemini-3-flash-preview",
+    output_key="claims_verification",
     description="Verifies extracted claims using Google Search to determine their factual accuracy.",
     instruction="""
     You are a fact-checking expert that verifies claims using Google Search results.
