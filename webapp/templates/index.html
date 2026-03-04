@@ -586,16 +586,21 @@ let prompts = [
         name: "Base Prompt",
         type: "base",
         model: "gemini-2.5-flash",
-        prompt: `You are a misinformation detection agent. Analyze the following article and evaluate it on four dimensions:
+        prompt: `You are an expert in misinformation and disinformation detection and scoring. 
+Analyze the given article and give it a score (0-2) based on how strong the
+frequency heuristic is. 
 
-1. Frequency Heuristic: Does the article repeat claims to make them seem more credible?
-2. Malicious Account: Are there signs of coordinated or inauthentic behavior?
-3. Sensationalism: Does the article use emotionally charged or exaggerated language?
-4. Naive Realism: Does the article present a one-sided view as objective truth?
+Frequency heuristic is defined as: 
+- Repetition analysis: Observe how often a claim or narrative is echoed across the text or across references.
+- Origin tracing: Determine whether frequently repeated information is traced to a credible or questionable source.
+- Evidence verification: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
 
-For each dimension, provide a score from 0 (low concern) to 1 (high concern).
-
-Article: {article}`,
+Return only a JSON object in the following format:
+{
+    "score": 0|1|2,
+    "reasoning": "Explanation",
+    "confidence": 0-100
+}`,
         scores: { fh: 0.30, ma: 0.10, sens: 0.43, nr: 0.38 },
         notes: "Baseline prompt. Simple instruction-following with no examples or scaffolding. Struggled with Malicious Account due to lack of context about what signals to look for."
     },
