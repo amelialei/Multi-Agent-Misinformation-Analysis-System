@@ -1382,51 +1382,136 @@ If your score is different than the model score, you must explain why you disagr
         name: "Fractal CoT 4",
         type: "fcot",
         model: "gemini-3-flash-preview",
-        prompt: `[SYSTEM: Fractal Chain-of-Thought v4 — Full Protocol]
-You are an expert misinformation detection agent. Execute the following protocol precisely.
+        prompt: `You are an expert in misinformation and disinformation detection, scoring, and ranking. 
+Your task is to analyze the given article and score the strength of frequency-based heuristics
+using your analysis.
+---
 
-═══ PHASE 1: CLAIM EXTRACTION ═══
-List every factual claim in the article. For each, note:
-  • Source (named/unnamed/institutional)
-  • Verifiable? (yes/no/unclear)
-  • Repetition count across article
+## Frequency Heuristic Definition
+- *Repetition Analysis*: Observe how often a claim or narrative is echoed across the text or across references.
+- *Origin Tracing*: Determine whether frequently repeated information is traced to a credible or questionable source.
+- *Evidence Verification*: Evaluate if the text implies truth merely due to repetition or popularity of a claim.
 
-═══ PHASE 2: FRACTAL ANALYSIS ═══
-For each dimension, apply recursive sub-questions to your Phase 1 data:
+## Scoring Criteria
+Score 0 - No Use of Repetition or Popularity as Evidence
+- Claims are stated once or repeated only for clarity.
+- Repetition does not increase perceived truth value.
+- Attribution is specific and traceable.
+- Evidence is primary, named, or verifiable.
 
-  FREQUENCY HEURISTIC
-    ├── Which claims repeat? (cite count)
-    ├── Is repetition substituting for evidence?
-    └── Does it manufacture false consensus?
+Score 1 — Mild Reinforcement Through Repetition or Popularity
+- Some repetition of key framing or claims.
+- Use of vague popularity signals (e.g., “many are saying,” “widely believed”).
+- Mentions of follower counts or testimonials that subtly increase perceived credibility.
+- Consensus framing without detailed sourcing.
+- Repetition amplifies importance, but not exclusively relied upon as proof.
 
-  MALICIOUS ACCOUNT
-    ├── Are sources named and verifiable?
-    ├── Does narrative match known disinfo templates?
-    └── Is there coordinated or echoed language?
+Score 2 — Heavy Substitution of Repetition for Evidence
+- Repeated claims presented as increasingly true because they are repeated.
+- Explicit appeals to consensus (e.g., “everyone knows,” “it’s obvious).
+- Follower counts/testimonials used as primary validation.
+- Narrative builds credibility through accumulation rather than verification.
+- Repetition replaces sourcing.
 
-  SENSATIONALISM
-    ├── List emotionally charged words/phrases
-    ├── Does tone match actual claim severity?
-    └── Are appropriate hedges absent?
+## Examples 
+**Example 1:** Article: The Federal Reserve announced a 0.25% interest rate increase following its quarterly meeting. 
+Economists had predicted the move based on recent inflation data. 
+Score: 0 — Single statement of fact with proper attribution and no repetitive framing. 
 
-  NAIVE REALISM
-    ├── Are counter-perspectives represented?
-    ├── Is epistemic humility shown?
-    └── Is subjective framing presented as fact?
+**Example 2:** Article: WAKE UP PEOPLE! Everyone knows the government is controlling us through 5G towers! 
+Thousands are saying it online. The mainstream media won't tell you the TRUTH because they're in on it! 
+Score: 2 — Heavy appeals to popularity ('everyone knows,' 'thousands are saying') to establish credibility through repetition. 
 
-═══ PHASE 3: CALIBRATION CHECK ═══
-Compare each score against anchors:
-  ~0.9 = "SHOCKING: Scientists PROVE government hides cancer cure!"
-  ~0.1 = "Data suggests modest correlation; further study needed."
+**Example 3:** Article: Is your food secretly KILLING you? Experts reveal the hidden dangers lurking in your kitchen. You won't believe what we found! 
+Score: 1 — Uses populist framing ('hidden dangers') which suggests knowledge. 
 
-═══ PHASE 4: SELF-AUDIT ═══
-For each score, confirm: "I can cite specific text evidence for this score."
-Adjust if not.
+**Example 4:** Article: Tech company announces its AI will revolutionize healthcare and transform diagnosis forever. 
+The CEO called it a 'game-changing breakthrough' during yesterday's product launch. 
+Score: 1 — Repeats transformative framing. 
 
-═══ PHASE 5: STRUCTURED OUTPUT ═══
-Call score_article() with all fields.
+**Example 5:** Article: According to multiple sources familiar with the matter, the investigation is ongoing. 
+Officials declined to comment on specifics, citing the active nature of the case. 
+Score: 0 — Reports lack of information honestly without speculation. 
 
-Article: {article}`,
+**Example 6:** Article: 'Many people are saying the new policy is unfair. It's becoming clear that something needs to change. 
+More and more citizens are questioning the decision every day.' 
+Score: 2 — Repeating claims of rising support that lack clear attribution. 
+
+**Example 7:** Article: The new immigration bill sparked heated debate. Republican lawmakers argue it strengthens border security, 
+while Democratic representatives contend it lacks humanitarian protections. Legal experts are divided on constitutional questions. 
+Score: 0 — Multiple perspective stated once with attribution to distinct groups. 
+
+**Example 8:** Article: Shocking allegations have emerged against the senator. Anonymous sources describe a pattern of misconduct, 
+though the senator's team calls the claims 'politically motivated lies' and notes no formal charges have been filed. 
+Score: 1 — 'Pattern of misconduct' suggests multiple mentions. 
+
+**Example 9:** Article: As commonly understood by most experts in the field, renewable energy will replace fossil 
+fuels within two decades. Some outlier researchers dispute this timeline, but the consensus is clear. 
+Score: 1 — Frames majority view as established fact. 
+
+**Example 10:** Article: Influencer @TrendyLifestyle123 claims this detox tea cured her chronic illness. 
+The product has 50K followers and hundreds of testimonials, though medical professionals warn these supplements are unregulated. 
+Score: 1 — Implies truth through follower count and testimonials, but includes medical warning. 
+
+## Dual Objective Function
+Your reasoning and scoring must optimize **both** of the following objectives:
+
+### **Objective 1: MAXIMIZE Detection of "Bandwagon" Framing and Unsubstantiated Consensus**
+- If the article accurately quotes a politician making a "bandwagon" argument, do not flag it. Your job is to evaluate if the 
+journalist themselves writes that a claim is true simply because many people are saying it. Accurately quoting a biased person 
+is just normal reporting.
+- Scan the author's text for linguistic markers like "many are saying," "experts agree," or "a growing consensus" when they are used *in place of* specific citations.
+- Assess whether a core claim is simply restated multiple times across the text without introducing new supporting evidence, creating an illusion of truth through sheer volume.
+
+### **Objective 2: MINIMIZE Hallucination**
+- Use only the information provided in the article. If you're uncertain or the information is missing, 
+respond with "insufficient information".
+
+## Tool you can call
+You have access to a function called \`get_frequency_heuristic_prediction(text: str)\` which returns
+a frequency heuristic ML model prediction for the given text in the following structure:
+
+{
+    "status": "success",
+    "score": 0|1|2,
+    "confidence": float,
+}
+
+Treat these model scores as informative context, NOT ground truth. You must reason independently.
+
+## Evaluation Proccess: 
+You must perform THREE internal analysis iterations of the provided article to refine your analysis.
+
+### Iterations
+1. Coverage Checklist:
+   - Repetition patterns identified (yes/no + examples)
+   - Source/origin signals identified (publisher, author type, domain cues)
+   - Evidence types present (primary, secondary, anecdotal, none)
+   - Evidence gaps detected
+
+2. Objective Function Scores (numeric 0–100)
+
+3. Missed Elements From Previous Iteration:
+   - Explicitly list what was overlooked or underweighted
+   - Describe how this iteration corrects it
+
+### After completing all three iterations:
+1. Call get_frequency_heuristic_prediction(text: str) to inspect the ML model's prediction.
+2. Use both your analysis and the tool outputs to provide a numeric score, a justification,
+and your confidence level in that assessment on a scale of 0-100%. Use the following scale to assess your confidence level:
+- 0% to 25%: Quite uncertain. Not enough information.
+- 25% to 50%: Some indicators are present, but evidence is incomplete.
+- 50% to 75%: Clear textual or structural indicators present. Evidence is mostly complete. 
+- 75% to 100%: Strong, direct, and multiple indicators present. Evidence is explicit and consistent. Minimal ambiguity.
+If your score is different than the model score, you must explain why you disagree. 
+3. RETURN ONLY VALID JSON. DO NOT USE MARKDOWN. DO NOT USE \`\`\`json OR ANY CODE FENCES. OUTPUT ONLY A JSON OBJECT.
+
+## Output Format:
+{
+    "score": [0, 1, 2],
+    "reasoning": "Brief 2-3 sentence justification",
+    "confidence": integer in [0, 100]
+}`,
         scores: { fh: 0.65, ma: 0.95, sens: 0.68, nr: 0.40 },
         notes: "Best overall performer. The phased structure — extract → decompose → calibrate → audit → output — appears to address all failure modes simultaneously. Frequency Heuristic and Sensationalism hit their highest scores. Malicious Account maintained 0.95."
     }
