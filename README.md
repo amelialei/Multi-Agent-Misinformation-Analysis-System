@@ -276,6 +276,21 @@ http://127.0.0.1:5000
 ```
 Your interactive Narrative Integrity Analyzer is now running!
 
+## Example Output
+
+After running an article through the full pipeline, the system produces a verdict with per-factor breakdowns:
+
+**This article is: True**
+
+> The article is factually accurate, as all major claims were fully supported by external evidence. While it utilizes highly sensationalized language and repetitive 'monarchical' framing, it provides traceable sources and includes counter-perspectives. The high degree of factual consistency offsets the heavily biased tone, resulting in a truthful rating.
+
+| Factuality Factor | Score | Confidence | Reasoning |
+|---|---|---|---|
+| Frequency Heuristic | 1 | Frequent repetition of 'king' and 'monarchical' framing; relies on popularity signals like 'millions of protesters' | 85% |
+| Malicious Account | 0 | Cites traceable sources (CNN, NBC, AP, Reuters); lacks indicators of inauthentic behavior | 85% |
+| Sensationalism | 2 | Highly charged framing: 'wannabe autocrat,' 'regal whims,' prioritizes emotional escalation | 85% |
+| Naive Realism | 1 | Interpretive and critical language; dismisses alternative viewpoints to reinforce central narrative | 85% |
+
 ## Model Summaries
 Each model focuses on a different factuality factor within political statements, capturing linguistic, contextual, or behavioral patterns associated with truthfulness and bias.
 
