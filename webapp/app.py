@@ -123,6 +123,7 @@ def score():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
+    print("Your interactive Multi-Agent Misinformation Analysis System is now running!")
     app.run(
         debug=True,
         use_reloader=False,

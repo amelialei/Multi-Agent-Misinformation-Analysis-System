@@ -274,7 +274,7 @@ python app.py
 ```cpp
 http://127.0.0.1:5000
 ```
-Your interactive Narrative Integrity Analyzer is now running!
+Your interactive Multi-Agent Misinformation Analysis System is now running!
 
 ## Example Output
 
