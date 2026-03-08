@@ -148,6 +148,14 @@ Create a `.env` file in the `webapp` folder and paste your API key from [Google 
 GEMINI_API_KEY=YOUR_API_KEY
 ```
 
+### Create a .env file in ff_agents/
+Create a `.env` file in the `ff_agents` folder with the following variables:
+```env
+GOOGLE_GENAI_USE_VERTEXAI=0
+GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
+```
+Get your API key from [Google AI Studio](https://aistudio.google.com).
+
 ### Install dependencies
 ```bash
 pip install -r requirements.txt
