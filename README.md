@@ -247,5 +247,10 @@ google-adk[a2a]
 > brew install libomp
 > ```
 
+## Acknowledgment
+
+This project was developed as part of the HDSI Capstone program.  
+For additional information and related work, please visit: https://alternusvera.com
+
 ## License
 This project is part of the DSC180B Capstone course at UC San Diego.
