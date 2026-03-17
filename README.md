@@ -248,6 +248,9 @@ google-adk[a2a]
 > ```
 
 ## Acknowledgment
-
 This project was developed as part of the HDSI Capstone program.  
-For additional information and related work, please visit: https://alternusvera.com
+
+## Project Context
+This project is an implementation/extension of the **Alternus Vera Research Project** supervised by **Dr. Ali Arsanjani**. It focuses on the **AI4Good** mission of identifying and mitigating digital misinformation and disinformation through advanced techniques such as **Veracity Vectors** and **Truthness Tensors**.
+
+For more details on the core methodology, visit [Alternus Vera](https://alternusvera.com) or the [AI4Good Core Repository](https://github.com/chriss-mo/ai4good).
